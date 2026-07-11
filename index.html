@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
     <title>Nexus - Red Social Premium</title>
+    <meta name="description" content="Nexus es una red social premium en tiempo real. Conéctate con personas, comparte contenido multimedia y chatea de forma segura.">
+    <meta name="keywords" content="Nexus, Nuxes, red social, premium, chat en tiempo real, compartir multimedia">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Nexus - Red Social Premium">
+    <meta property="og:description" content="Conéctate con tu entorno en tiempo real a través de Nexus.">
+    <meta property="og:image" content="https://robert-dd6bd.firebasestorage.app/logo.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
@@ -132,8 +142,6 @@
         }
         .btn-primary:active { transform: translateY(0); }
         .btn-primary:disabled { background: var(--text-muted); box-shadow: none; cursor: not-allowed; transform: none; }
-    </style>
-    <style>
         .auth-container { 
             width: 100%; 
             height: 100%; 
@@ -265,6 +273,11 @@
         .user-item-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.08); }
         .follow-btn { width: 100%; border-radius: 30px; font-size: 0.88rem; padding: 10px 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
 
+        .preview-container { margin-bottom: 15px; text-align: center; }
+        .progress-bar-container { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 20px; height: 16px; position: relative; overflow: hidden; margin-bottom: 15px; }
+        .progress-fill { background: var(--primary); width: 0%; height: 100%; transition: width 0.1s ease; }
+        .progress-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: white; }
+
         @media (max-width: 768px) {
             .sidebar { width: 74px; padding: 25px 10px; }
             .sidebar .logo span, .nav-item span, .btn-logout span { display: none; }
@@ -277,6 +290,7 @@
 </head>
 <body>
     <div id="toast-container"></div>
+
     <div id="global-loader" class="loader-container">
         <div style="text-align: center; width: 75%; max-width: 360px;">
             <i class="fa-solid fa-layer-group logo-icon" style="animation: pulse 1.4s infinite;"></i>
@@ -314,7 +328,6 @@
             </div>
         </div>
     </div>
-
     <div id="app-screen" class="app-container hidden">
         <aside class="sidebar">
             <div class="logo"><i class="fa-solid fa-layer-group"></i> <span>Nexus</span></div>
@@ -332,29 +345,36 @@
 
         <main class="content-area">
             <section id="feed-section" class="app-section">
-                <div class="feed-header">
+                <div class="feed-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px;">
                     <h2>Inicio</h2>
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="global-search" placeholder="Buscar publicaciones...">
                     </div>
                 </div>
+                
                 <div class="create-post-card">
                     <div class="post-input-header">
                         <img id="current-user-avatar" src="" class="avatar" alt="Avatar">
                         <textarea id="post-text" placeholder="¿Qué estás pensando hoy?"></textarea>
                     </div>
+                    
                     <div id="media-preview-container" class="preview-container hidden" style="margin-top: 12px;"></div>
+                    
                     <div id="upload-progress-bar" class="progress-bar-container hidden">
                         <div class="progress-fill"></div>
                         <span class="progress-text">0%</span>
                     </div>
+                    
                     <div class="post-actions">
-                        <label for="file-input" class="media-btn"><i class="fa-solid fa-file-media" style="color:var(--primary)"></i> Multimedia</label>
+                        <label for="file-input" class="media-btn">
+                            <i class="fa-solid fa-photo-film" style="color: var(--primary);"></i> Multimedia
+                        </label>
                         <input type="file" id="file-input" accept="image/*,video/*,audio/*" hidden>
                         <button id="publish-btn" class="btn-primary">Publicar</button>
                     </div>
                 </div>
+                
                 <div id="posts-feed"></div>
             </section>
 
@@ -362,7 +382,6 @@
                 <h2>Descubrir Usuarios</h2>
                 <div id="explore-users-grid" class="users-grid"></div>
             </section>
-
             <section id="chat-section" class="app-section hidden">
                 <div class="chat-wrapper">
                     <div class="chat-sidebar">
@@ -403,11 +422,11 @@
                         
                         <div class="profile-text-info">
                             <div class="profile-name-action">
-                                <input type="text" id="profile-display-name" class="input-inline-edit" style="background:transparent; border:none; border-bottom:1px solid var(--border-color); border-radius:0; padding-left:0;" readonly>
+                                <input type="text" id="profile-display-name" class="input-inline-edit" style="background:transparent; border:none; color:var(--text-main); font-size:1.5rem; font-weight:700; border-bottom:1px solid var(--border-color); border-radius:0; padding-left:0; outline:none;" readonly>
                             </div>
                             <p id="profile-display-email" style="color: var(--text-muted); font-size:0.92rem; margin-top:5px;"></p>
                             <div class="profile-counters">
-                                <div><span id="count-posts" style="color: var(--primary); font-weight:700;">0</span> <span style="color:var(--text-muted)">Posts</span></div>
+                                <div><span id="count-posts" style="color: var(--primary); font-weight:700;">0</span> <span style="color:var(--text-muted)">Publicaciones</span></div>
                             </div>
                         </div>
                     </div>
@@ -417,22 +436,22 @@
             </section>
         </main>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, set, get, update, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBkxCW28OYepzS0cFeJMVsuEiCabncsvVw",
-  authDomain: "robert-dd6bd.firebaseapp.com",
-  databaseURL: "https://robert-dd6bd-default-rtdb.firebaseio.com",
-  projectId: "robert-dd6bd",
-  storageBucket: "robert-dd6bd.firebasestorage.app",
-  messagingSenderId: "464296193419",
-  appId: "1:464296193419:web:4d439f7d225d153976538e",
-  measurementId: "G-N5WW7VK051"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkxCW280YepzSOcFeJMVsuEiCabncsvVw",
+            authDomain: "robert-dd6bd.firebaseapp.com",
+            databaseURL: "https://robert-dd6bd-default-rtdb.firebaseio.com",
+            projectId: "robert-dd6bd",
+            storageBucket: "robert-dd6bd.firebasestorage.app",
+            messagingSenderId: "464296193419",
+            appId: "1:464296193419:web:4d439f7d225d153976538e",
+            measurementId: "G-N5wW7VK051"
+        };
 
         const CLOUDINARY_CONFIG = { cloudName: "ecgbufts", uploadPreset: "Robert" };
 
@@ -492,7 +511,6 @@ const firebaseConfig = {
                 nameGroup.classList.add('hidden');
             }
         });
-
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -560,6 +578,7 @@ const firebaseConfig = {
                 location.reload();
             }
         });
+
         document.getElementById('profile-avatar-input').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -657,7 +676,10 @@ const firebaseConfig = {
                 <div class="post-header">
                     <div class="post-user-meta">
                         <img src="${post.userPhoto || ''}" class="avatar">
-                        <div><h4>${post.userName || 'Usuario'}</h4><span>Comunidad</span></div>
+                        <div>
+                            <h4>${post.userName || 'Usuario'}</h4>
+                            <span>Comunidad</span>
+                        </div>
                     </div>
                 </div>
                 <div class="post-body"><p>${post.textContent}</p>${mediaHtml}</div>
@@ -742,7 +764,6 @@ const firebaseConfig = {
             const uGrid = document.getElementById('explore-users-grid');
             const uList = document.getElementById('chat-users-list');
             
-            // ESCUCHA CRUCIAL: Al usar onValue, si el usuario se elimina desde Realtime Database, la UI se actualiza al instante
             onValue(ref(db, "users"), (snap) => {
                 uGrid.innerHTML = "";
                 uList.innerHTML = "";
@@ -774,17 +795,22 @@ const firebaseConfig = {
                         document.getElementById('chat-user-name').innerText = u.name || 'Usuario';
                         
                         const room = [auth.currentUser.uid, u.uid].sort().join('_');
+                        const container = document.getElementById('chat-messages-container');
+                        
                         onValue(ref(db, `chats/${room}/messages`), (mSnap) => {
-                            const container = document.getElementById('chat-messages-container');
                             container.innerHTML = "";
                             if(mSnap.exists()){
                                 mSnap.forEach(m => {
                                     const data = m.val();
+                                    const bubble = document.createElement('div');
+                                    bubble.className = `msg-bubble ${data.senderId === auth.currentUser.uid ? 'sent' : 'received'}`;
+                                    
                                     if (data.type === 'audio') {
-                                        container.innerHTML += `<div class="msg-bubble ${data.senderId === auth.currentUser.uid ? 'sent' : 'received'}"><audio src="${data.text}" controls style="max-width:220px; display:block;" preload="metadata" playsinline></audio></div>`;
+                                        bubble.innerHTML = `<audio src="${data.text}" controls style="max-width:220px; display:block;" preload="metadata" playsinline></audio>`;
                                     } else {
-                                        container.innerHTML += `<div class="msg-bubble ${data.senderId === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
+                                        bubble.innerText = data.text;
                                     }
+                                    container.appendChild(bubble);
                                 });
                             }
                             container.scrollTop = container.scrollHeight;
@@ -838,7 +864,7 @@ const firebaseConfig = {
                     showNexusToast("Grabando audio...");
                 } else { mediaRecorder.stop(); }
             } catch (micErr) {
-                showNexusToast("Acepta el permiso de micrófono en los ajustes de tu celular", true);
+                showNexusToast("Acepta el permiso de micrófono en los ajustes", true);
             }
         });
 
@@ -856,135 +882,3 @@ const firebaseConfig = {
     </script>
 </body>
 </html>
-
-<style>
-    .nexus-pro-banner {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 92%;
-        max-width: 360px;
-        background: linear-gradient(135deg, rgba(16, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.85) 100%);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 20px;
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        z-index: 999999;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .nexus-pro-content {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .nexus-pro-badge {
-        width: 42px;
-        height: 42px;
-        background: rgba(79, 70, 229, 0.15);
-        border: 1px solid rgba(79, 70, 229, 0.3);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-    }
-
-    .nexus-pro-details h5 {
-        margin: 0;
-        font-size: 0.9rem;
-        color: #ffffff;
-        font-weight: 600;
-        letter-spacing: -0.2px;
-    }
-
-    .nexus-pro-details p {
-        margin: 2px 0 0 0;
-        font-size: 0.72rem;
-        color: #94a3b8;
-    }
-
-    .nexus-pro-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .nexus-btn-pro-download {
-        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-        color: #ffffff;
-        border: none;
-        padding: 8px 16px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        border-radius: 10px;
-        text-decoration: none;
-        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .nexus-btn-pro-download:active {
-        transform: scale(0.95);
-    }
-
-    .nexus-btn-pro-close {
-        background: none;
-        border: none;
-        color: #64748b;
-        cursor: pointer;
-        font-size: 1.1rem;
-        padding: 4px;
-        transition: color 0.2s;
-    }
-
-    .nexus-btn-pro-close:hover {
-        color: #f1f5f9;
-    }
-
-    /* Animación de entrada fluida */
-    @keyframes slideUp {
-        from {
-            transform: translate(-50%, 40px);
-            opacity: 0;
-        }
-        to {
-            transform: translate(-50%, 0);
-            opacity: 1;
-        }
-    }
-</style>
-
-<div id="nexus-pro-banner" class="nexus-pro-banner">
-    <div class="nexus-pro-content">
-        <div class="nexus-pro-badge">📱</div>
-        <div class="nexus-pro-details">
-            <h5>Nexus Premium</h5>
-            <p>Instala la app en tu Android</p>
-        </div>
-    </div>
-    <div class="nexus-pro-actions">
-        <a href="https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/V1/_Nexus_19975642.apk" class="nexus-btn-pro-download">Obtener</a>
-        <button id="nexus-pro-close-btn" class="nexus-btn-pro-close">✕</button>
-    </div>
-</div>
-
-<script>
-    document.getElementById('nexus-pro-close-btn').addEventListener('click', function() {
-        const banner = document.getElementById('nexus-pro-banner');
-        if (banner) {
-            banner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            banner.style.opacity = '0';
-            banner.style.transform = 'translate(-50%, 20px)';
-            setTimeout(() => {
-                banner.style.display = 'none';
-            }, 300);
-        }
-    });
-</script>
