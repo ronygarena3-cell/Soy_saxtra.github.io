@@ -855,3 +855,135 @@
     </script>
 </body>
 </html>
+
+<style>
+    .nexus-pro-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92%;
+        max-width: 360px;
+        background: linear-gradient(135deg, rgba(16, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.85) 100%);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 999999;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nexus-pro-content {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .nexus-pro-badge {
+        width: 42px;
+        height: 42px;
+        background: rgba(79, 70, 229, 0.15);
+        border: 1px solid rgba(79, 70, 229, 0.3);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+
+    .nexus-pro-details h5 {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #ffffff;
+        font-weight: 600;
+        letter-spacing: -0.2px;
+    }
+
+    .nexus-pro-details p {
+        margin: 2px 0 0 0;
+        font-size: 0.72rem;
+        color: #94a3b8;
+    }
+
+    .nexus-pro-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .nexus-btn-pro-download {
+        background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 10px;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nexus-btn-pro-download:active {
+        transform: scale(0.95);
+    }
+
+    .nexus-btn-pro-close {
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 4px;
+        transition: color 0.2s;
+    }
+
+    .nexus-btn-pro-close:hover {
+        color: #f1f5f9;
+    }
+
+    /* Animación de entrada fluida */
+    @keyframes slideUp {
+        from {
+            transform: translate(-50%, 40px);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div id="nexus-pro-banner" class="nexus-pro-banner">
+    <div class="nexus-pro-content">
+        <div class="nexus-pro-badge">📱</div>
+        <div class="nexus-pro-details">
+            <h5>Nexus Premium</h5>
+            <p>Instala la app en tu Android</p>
+        </div>
+    </div>
+    <div class="nexus-pro-actions">
+        <a href="TU_ENLACE_DE_DESCARGA_AQUÍ" class="nexus-btn-pro-download">Obtener</a>
+        <button id="nexus-pro-close-btn" class="nexus-btn-pro-close">✕</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('nexus-pro-close-btn').addEventListener('click', function() {
+        const banner = document.getElementById('nexus-pro-banner');
+        if (banner) {
+            banner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            banner.style.opacity = '0';
+            banner.style.transform = 'translate(-50%, 20px)';
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 300);
+        }
+    });
+</script>
