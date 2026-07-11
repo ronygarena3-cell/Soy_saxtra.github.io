@@ -1,1 +1,937 @@
-jsjjsjakakkskk
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Nexus - Red Social Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #060b13;
+            --bg-surface: #101726;
+            --bg-input: #1a2333;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --accent-green: #10b981;
+            --accent-red: #f43f5e;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-input: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.2);
+            --border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        html, body { 
+            width: 100% !important; 
+            height: 100% !important; 
+            overflow: hidden !important; 
+            position: fixed !important; 
+            background-color: var(--bg-main); 
+            color: var(--text-main); 
+            transition: background-color 0.3s ease;
+        }
+        
+        input, textarea {
+            -webkit-user-select: text !important;
+            user-select: text !important;
+        }
+
+        .hidden { display: none !important; }
+
+        #toast-container { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 100000; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            max-width: 350px; 
+            width: calc(100% - 40px); 
+            pointer-events: none;
+        }
+        .nexus-toast { 
+            background: rgba(16, 23, 38, 0.85); 
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary); 
+            color: var(--text-main); 
+            padding: 16px; 
+            border-radius: var(--radius-md); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            font-size: 0.9rem; 
+            pointer-events: auto;
+        }
+        .nexus-toast.error { border-left-color: var(--accent-red); }
+        .nexus-toast i { font-size: 1.1rem; color: var(--primary); }
+        .nexus-toast.error i { color: var(--accent-red); }
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+
+        .loader-container { 
+            position: fixed; 
+            inset: 0; 
+            background: var(--bg-main); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 99999; 
+        }
+        .logo-icon { font-size: 3.5rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); margin-bottom: 20px; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.95); } }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+        .btn-primary:active { transform: translateY(0); }
+        .btn-primary:disabled {    <style>
+        .auth-container { 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
+            overflow-y: auto;
+            position: absolute;
+            inset: 0;
+        }
+        .auth-card { 
+            background: var(--bg-surface); 
+            padding: 40px; 
+            border-radius: var(--radius-lg); 
+            width: 100%; 
+            max-width: 420px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+        }
+        .auth-header h2 { font-size: 1.8rem; font-weight: 700; margin-top: 10px; }
+        .auth-toggle { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
+        .auth-toggle span { color: var(--primary); font-weight: 600; cursor: pointer; }
+        
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); transition: var(--transition); }
+        .input-group input { width: 100%; padding: 14px 16px 14px 46px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); outline: none; transition: var(--transition); font-size: 0.95rem; }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+        .input-group input:focus + i { color: var(--primary); }
+
+        .app-container { display: flex; width: 100%; height: 100%; overflow: hidden; position: relative; }
+        
+        .sidebar { 
+            width: 260px; 
+            background: var(--bg-surface); 
+            border-right: 1px solid var(--border-color); 
+            padding: 30px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            flex-shrink: 0;
+        }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+        .logo i { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+        
+        .nav-menu { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; color: var(--text-muted); text-decoration: none; border-radius: var(--radius-md); font-weight: 600; transition: var(--transition); cursor: pointer;}
+        .nav-item:hover { color: var(--text-main); background: rgba(255,255,255,0.02); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
+        .nav-item.active i { color: white; }
+        
+        .sidebar-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .btn-logout { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.95rem; transition: var(--transition); }
+        .btn-logout:hover { color: var(--accent-red); }
+        .btn-icon { background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .btn-icon:hover { transform: scale(1.05); background: var(--border-color); }
+
+        .content-area { flex-grow: 1; height: 100%; overflow-y: scroll; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 40px; max-width: 1200px; width: 100%; }
+        .app-section { animation: sectionFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes sectionFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .feed-header h2 { font-size: 1.8rem; font-weight: 700; }
+        .search-box { position: relative; flex-grow: 1; max-width: 380px; }
+        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-box input { width: 100%; padding: 12px 16px 12px 44px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 30px; color: var(--text-main); outline: none; font-size: 0.9rem; transition: var(--transition); }
+        .search-box input:focus { border-color: var(--primary); background: var(--bg-input); }
+        
+        .create-post-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        .post-input-header { display: flex; gap: 16px; align-items: flex-start; }
+        .avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); flex-shrink: 0; }
+        .avatar-large { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); box-shadow: 0 0 15px var(--primary-glow); cursor: pointer; transition: var(--transition); }
+        .avatar-large:hover { transform: scale(1.03); filter: brightness(0.9); }
+        textarea { flex-grow: 1; background: transparent; border: none; color: var(--text-main); resize: none; height: 80px; font-size: 1.05rem; outline: none; padding-top: 5px; }
+        
+        .post-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 18px; margin-top: 12px; }
+        .media-btn { background: var(--bg-input); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 30px; font-size: 0.88rem; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .media-btn:hover { background: rgba(255,255,255,0.05); transform: translateY(-1px); }
+
+        .post-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; transition: var(--transition); }
+        .post-card:hover { border-color: rgba(255,255,255,0.1); }
+        .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .post-user-meta { display: flex; align-items: center; gap: 14px; }
+        .post-user-meta h4 { font-weight: 600; font-size: 1rem; }
+        .post-user-meta span { font-size: 0.8rem; color: var(--text-muted); }
+        .post-body { font-size: 1.02rem; line-height: 1.5; margin-bottom: 16px; color: rgba(255,255,255,0.9); word-break: break-word; }
+        .post-media { width: 100%; border-radius: var(--radius-md); margin-top: 10px; max-height: 420px; object-fit: cover; display: block; border: 1px solid var(--border-color); }
+        
+        .audio-player { width: 100%; margin-top: 12px; border-radius: 30px; background: var(--bg-input); }
+        
+        .post-footer-actions { display: flex; gap: 24px; border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px; }
+        .action-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 500; transition: var(--transition); }
+        .action-btn:hover { color: var(--text-main); }
+        .action-btn.like-btn.active { color: var(--accent-red); font-weight: 600; }
+        .action-btn i { font-size: 1.1rem; }
+
+        .comments-section { margin-top: 20px; background: rgba(0,0,0,0.15); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+        .comment-input-box { display: flex; gap: 10px; margin-bottom: 16px; }
+        .comment-input-box input { flex-grow: 1; background: var(--bg-input); border: 1px solid var(--border-color); padding: 11px 16px; border-radius: 30px; color: var(--text-main); outline: none; font-size: 0.9rem; }
+        .comment-element { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 8px; }
+
+        .chat-wrapper { display: flex; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); height: calc(100vh - 140px); overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        .chat-sidebar { width: 32%; border-right: 1px solid var(--border-color); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-box-area { width: 68%; display: flex; flex-direction: column; background: var(--bg-main); position: relative; height: 100%; overflow: hidden; }
+        .chat-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); gap: 14px; }
+        .chat-empty i { font-size: 4rem; color: rgba(255,255,255,0.05); }
+        
+        .chat-active { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+        .chat-active-header { padding: 18px 24px; background: var(--bg-surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .chat-messages { flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.1); }
+        
+        .msg-bubble { max-width: 65%; padding: 12px 18px; border-radius: 18px; line-height: 1.5; word-break: break-word; font-size: 0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .msg-bubble.sent { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 15px var(--primary-glow); }
+        .msg-bubble.received { background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .chat-footer-input { padding: 18px 24px; background: var(--bg-surface); display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--border-color); flex-shrink: 0; }
+        .chat-footer-input input { flex-grow: 1; background: var(--bg-input); border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 30px; color: var(--text-main); outline: none; font-size: 0.95rem; }
+        
+        .btn-send { background: var(--primary); border: none; color: white; width: 46px; height: 46px; border-radius: 50%; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px var(--primary-glow); }
+        .btn-send:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-mic { background: var(--accent-green); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        .btn-mic.recording { background: var(--accent-red); box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4); animation: pulse 1.2s infinite; }
+
+        .profile-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 30px; }
+        .profile-meta { display: flex; gap: 30px; align-items: center; }
+        .profile-counters { display: flex; gap: 24px; margin-top: 16px; font-size: 0.95rem; }
+        .users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 25px; }
+        
+        .user-item-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; transition: var(--transition); }
+        .user-item-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.08); }
+        .follow-btn { width: 100%; border-radius: 30px; font-size: 0.88rem; padding: 10px 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 74px; padding: 25px 10px; }
+            .sidebar .logo span, .nav-item span, .btn-logout span { display: none; }
+            .content-area { padding: 20px; }
+            .chat-wrapper { flex-direction: column; height: calc(100vh - 100px); }
+            .chat-sidebar { width: 100%; height: 35%; border-right: none; border-bottom: 1px solid var(--border-color); }
+            .chat-box-area { width: 100%; height: 65%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container"></div>
+  background: var(--text-muted); box-shadow: none; cursor: not-allowed; transform: none; }
+    </style>
+        <div id="global-loader" class="loader-container">
+        <div style="text-align: center; width: 75%; max-width: 360px;">
+            <i class="fa-solid fa-layer-group logo-icon" style="animation: pulse 1.4s infinite;"></i>
+            <h3 style="margin-bottom: 12px; font-weight: 600; letter-spacing: 0.3px;">Iniciando Nexus...</h3>
+            <div style="background: var(--bg-input); border-radius: 20px; height: 6px; width: 100%; overflow: hidden; border: 1px solid var(--border-color);">
+                <div id="init-progress-fill" style="background: var(--primary); width: 0%; height: 100%; transition: width 0.1s linear;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-screen" class="auth-container hidden">
+        <div class="auth-card">
+            <div class="auth-header" style="text-align: center; margin-bottom: 30px;">
+                <i class="fa-solid fa-layer-group logo-icon"></i>
+                <h2 id="auth-title">Iniciar Sesión</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">Conexión Premium en tiempo real</p>
+            </div>
+            <form id="auth-form">
+                <div class="input-group hidden" id="name-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="auth-name" placeholder="Nombre completo">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="auth-email" placeholder="Correo electrónico" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="auth-password" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="btn-primary" style="width: 100%; margin-top: 10px;">Entrar</button>
+            </form>
+            <div class="auth-toggle">
+                <p id="auth-toggle-text">¿No tienes cuenta? <span id="auth-toggle-btn">Regístrate</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-screen" class="app-container hidden">
+        <aside class="sidebar">
+            <div class="logo"><i class="fa-solid fa-layer-group"></i> <span>Nexus</span></div>
+            <nav class="nav-menu">
+                <a class="nav-item active" data-target="feed-section"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
+                <a class="nav-item" data-target="explore-section"><i class="fa-solid fa-compass"></i> <span>Explorar</span></a>
+                <a class="nav-item" data-target="chat-section"><i class="fa-solid fa-paper-plane"></i> <span>Mensajes</span></a>
+                <a class="nav-item" data-target="profile-section"><i class="fa-solid fa-user"></i> <span>Perfil</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="btn-icon"><i class="fa-solid fa-moon"></i></button>
+                <button id="logout-btn" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Salir</span></button>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <section id="feed-section" class="app-section">
+                <div class="feed-header">
+                    <h2>Inicio</h2>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-search" placeholder="Buscar publicaciones...">
+                    </div>
+                </div>
+                <div class="create-post-card">
+                    <div class="post-input-header">
+                        <img id="current-user-avatar" src="" class="avatar" alt="Avatar">
+                        <textarea id="post-text" placeholder="¿Qué estás pensando hoy?"></textarea>
+                    </div>
+                    <div id="media-preview-container" class="preview-container hidden" style="margin-top: 12px;"></div>
+                    <div id="upload-progress-bar" class="progress-bar-container hidden">
+                        <div class="progress-fill"></div>
+                        <span class="progress-text">0%</span>
+                    </div>
+                    <div class="post-actions">
+                        <label for="file-input" class="media-btn"><i class="fa-solid fa-file-media" style="color:var(--primary)"></i> Multimedia</label>
+                        <input type="file" id="file-input" accept="image/*,video/*,audio/*" hidden>
+                        <button id="publish-btn" class="btn-primary">Publicar</button>
+                    </div>
+                </div>
+                <div id="posts-feed"></div>
+            </section>
+
+            <section id="explore-section" class="app-section hidden">
+                <h2>Descubrir Usuarios</h2>
+                <div id="explore-users-grid" class="users-grid"></div>
+            </section>
+
+            <section id="chat-section" class="app-section hidden">
+                <div class="chat-wrapper">
+                    <div class="chat-sidebar">
+                        <h3 style="padding-bottom: 12px; border-bottom: 1px solid var(--border-color); font-weight:700;">Mensajes</h3>
+                        <div id="chat-users-list" style="display:flex; flex-direction:column; gap:6px; margin-top:10px;"></div>
+                    </div>
+                    <div class="chat-box-area">
+                        <div id="chat-empty-view" class="chat-empty">
+                            <i class="fa-solid fa-comments"></i>
+                            <p>Selecciona una conversación para iniciar</p>
+                        </div>
+                        <div id="chat-active-view" class="chat-active hidden">
+                            <div class="chat-active-header">
+                                <img id="chat-user-img" src="" class="avatar">
+                                <div>
+                                    <h4 id="chat-user-name">Usuario</h4>
+                                    <span style="font-size: 0.78rem; color: var(--accent-green); font-weight:600;">● En línea</span>
+                                </div>
+                            </div>
+                            <div id="chat-messages-container" class="chat-messages"></div>
+                            <div class="chat-footer-input">
+                                <input type="text" id="chat-message-input" placeholder="Escribe un mensaje seguro...">
+                                <button id="chat-mic-btn" class="btn-send btn-mic"><i class="fa-solid fa-microphone"></i></button>
+                                <button id="chat-send-btn" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="profile-section" class="app-section hidden">
+                <div class="profile-card">
+                    <div class="profile-meta">
+                        <label for="profile-avatar-input">
+                            <img id="profile-display-avatar" src="" class="avatar-large" title="Cambiar avatar">
+                        </label>
+                        <input type="file" id="profile-avatar-input" accept="image/*" hidden>
+                        
+                        <div class="profile-text-info">
+                            <div class="profile-name-action">
+                                <input type="text" id="profile-display-name" class="input-inline-edit" style="background:transparent; border:none; border-bottom:1px solid var(--border-color); border-radius:0; padding-left:0;" readonly>
+                            </div>
+                            <p id="profile-display-email" style="color: var(--text-muted); font-size:0.92rem; margin-top:5px;"></p>
+                            <div class="profile-counters">
+                                <div><span id="count-posts" style="color: var(--primary); font-weight:700;">0</span> <span style="color:var(--text-muted)">Posts</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 style="margin-bottom: 20px; font-weight:700;">Mis Publicaciones</h3>
+                <div id="my-posts-feed"></div>
+            </section>
+        </main>
+               <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, set, get, update, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBkxCW28OYepzS0cFeJMVsuEiCabncsvVw",
+  authDomain: "robert-dd6bd.firebaseapp.com",
+  projectId: "robert-dd6bd",
+  storageBucket: "robert-dd6bd.firebasestorage.app",
+  messagingSenderId: "464296193419",
+  appId: "1:464296193419:web:4d439f7d225d153976538e",
+  measurementId: "G-N5WW7VK051"
+};
+
+        const CLOUDINARY_CONFIG = { cloudName: "ecgbufts", uploadPreset: "Robert" };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app); 
+
+        let currentUserData = null;
+        let isSignUpMode = false;
+        let selectedFile = null;
+        let activeChatUserId = null;
+        let audioStreamInstance = null;
+
+        function showNexusToast(message, isError = false) {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            toast.className = `nexus-toast ${isError ? 'error' : ''}`;
+            toast.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = "fadeOut 0.3s ease forwards";
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        const authForm = document.getElementById('auth-form');
+        const authTitle = document.getElementById('auth-title');
+        const authSubmitBtn = document.getElementById('auth-submit-btn');
+        const authToggleBtn = document.getElementById('auth-toggle-btn');
+        const nameGroup = document.getElementById('name-group');
+        const navItems = document.querySelectorAll('.nav-item');
+        const appSections = document.querySelectorAll('.app-section');
+
+        function showSection(sectionId) {
+            appSections.forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId)?.classList.remove('hidden');
+            navItems.forEach(item => {
+                if(item.getAttribute('data-target') === sectionId) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => { e.preventDefault(); showSection(item.getAttribute('data-target')); });
+        });
+
+        authToggleBtn.addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            if (isSignUpMode) {
+                authTitle.innerText = "Crear Cuenta";
+                authSubmitBtn.innerText = "Registrarse";
+                nameGroup.classList.remove('hidden');
+            } else {
+                authTitle.innerText = "Iniciar Sesión";
+                authSubmitBtn.innerText = "Entrar";
+                nameGroup.classList.add('hidden');
+            }
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const name = document.getElementById('auth-name').value;
+
+            try {
+                if (isSignUpMode) {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    const defaultAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}`;
+                    await updateProfile(user, { displayName: name, photoURL: defaultAvatar });
+                    
+                    await set(ref(db, 'users/' + user.uid), {
+                        uid: user.uid, name: name, email: email, photoURL: defaultAvatar,
+                        isOnline: true, postsCount: 0
+                    });
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
+            } catch (error) { showNexusToast(error.message, true); }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            const progressFill = document.getElementById('init-progress-fill');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) clearInterval(interval);
+                else { width += 10; if(progressFill) progressFill.style.width = width + '%'; }
+            }, 80);
+
+            if (user) {
+                onValue(ref(db, 'users/' + user.uid), (snapshot) => {
+                    if(snapshot.exists()){
+                        currentUserData = snapshot.val();
+                        document.getElementById('current-user-avatar').src = currentUserData?.photoURL || '';
+                        document.getElementById('profile-display-avatar').src = currentUserData?.photoURL || '';
+                        document.getElementById('profile-display-name').value = currentUserData?.name || 'Usuario';
+                        document.getElementById('profile-display-email').innerText = currentUserData?.email || '';
+                        document.getElementById('count-posts').innerText = currentUserData?.postsCount || 0;
+                    }
+                });
+
+                setTimeout(() => {
+                    clearInterval(interval);
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    document.getElementById('app-screen').classList.remove('hidden');
+                    document.getElementById('global-loader').classList.add('hidden');
+                    initAppFeatures();
+                }, 1500);
+            } else {
+                setTimeout(() => {
+                    clearInterval(interval);
+                    document.getElementById('auth-screen').classList.remove('hidden');
+                    document.getElementById('app-screen').classList.add('hidden');
+                    document.getElementById('global-loader').classList.add('hidden');
+                }, 1500);
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            if (auth.currentUser) {
+                await update(ref(db, 'users/' + auth.currentUser.uid), { isOnline: false });
+                await signOut(auth);
+                location.reload();
+            }
+        });
+                 </div>
+          document.getElementById('profile-avatar-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            showNexusToast("Actualizando avatar...");
+            try {
+                const res = await uploadToCloudinary(file);
+                await update(ref(db, 'users/' + auth.currentUser.uid), { photoURL: res.secure_url });
+                showNexusToast("¡Avatar actualizado!");
+            } catch (err) { showNexusToast("Error al procesar la imagen", true); }
+        });
+
+        const fileInput = document.getElementById('file-input');
+        const mediaPreview = document.getElementById('media-preview-container');
+        fileInput.addEventListener('change', () => {
+            selectedFile = fileInput.files ? fileInput.files[0] : null;
+            if (selectedFile) {
+                mediaPreview.innerHTML = `<p class="media-btn"><i class="fa-solid fa-paperclip"></i> Archivo listo</p>`;
+                mediaPreview.classList.remove('hidden');
+            }
+        });
+
+        async function uploadToCloudinary(file) {
+            return new Promise((resolve, reject) => {
+                const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/upload`;
+                const xhr = new XMLHttpRequest();
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+
+                const progressContainer = document.getElementById('upload-progress-bar');
+                const progressFill = progressContainer.querySelector('.progress-fill');
+                const progressText = progressContainer.querySelector('.progress-text');
+                progressContainer.classList.remove('hidden');
+
+                xhr.open('POST', url, true);
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const pct = Math.round((e.loaded / e.total) * 100);
+                        progressFill.style.width = pct + '%';
+                        progressText.innerText = pct + '%';
+                    }
+                };
+                xhr.onload = () => {
+                    progressContainer.classList.add('hidden');
+                    if (xhr.status === 200) resolve(JSON.parse(xhr.responseText));
+                    else reject(JSON.parse(xhr.responseText));
+                };
+                xhr.onerror = () => reject({secure_url: ""});
+                xhr.send(formData);
+            });
+        }
+
+        document.getElementById('publish-btn').addEventListener('click', async () => {
+            const text = document.getElementById('post-text').value.trim();
+            if (!text && !selectedFile) return showNexusToast("El post no puede estar vacío", true);
+            document.getElementById('publish-btn').disabled = true;
+
+            try {
+                let fileUrl = "", fileType = "none";
+                if (selectedFile) {
+                    const uploadResult = await uploadToCloudinary(selectedFile);
+                    fileUrl = uploadResult.secure_url;
+                    fileType = selectedFile.type.split('/')[0];
+                }
+
+                const newPostRef = push(ref(db, 'posts'));
+                await set(newPostRef, {
+                    id: newPostRef.key,
+                    uid: auth.currentUser.uid, userName: currentUserData?.name || "Usuario", userPhoto: currentUserData?.photoURL || "",
+                    textContent: text, fileUrl: fileUrl, fileType: fileType, likesCount: 0, commentsCount: 0, createdAt: Date.now()
+                });
+
+                const currentPostsCount = (currentUserData?.postsCount || 0) + 1;
+                await update(ref(db, 'users/' + auth.currentUser.uid), { postsCount: currentPostsCount });
+                
+                document.getElementById('post-text').value = "";
+                selectedFile = null;
+                mediaPreview.classList.add('hidden');
+                showNexusToast("¡Publicación compartida!");
+            } catch (err) { showNexusToast(err.message, true); }
+            finally { document.getElementById('publish-btn').disabled = false; }
+        });
+
+        function buildFeedCard(post, container, isLiked) {
+            let mediaHtml = "";
+            if (post.fileUrl) {
+                if (post.fileType?.includes('image') || post.fileUrl.match(/\.(jpeg|jpg|png|webp|gif)$/i)) mediaHtml = `<img src="${post.fileUrl}" class="post-media" loading="lazy">`;
+                else if (post.fileType?.includes('video') || post.fileUrl.match(/\.(mp4|webm|mov)$/i)) mediaHtml = `<video src="${post.fileUrl}" controls class="post-media"></video>`;
+                else mediaHtml = `<audio src="${post.fileUrl}" controls class="audio-player" preload="metadata" playsinline></audio>`;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.innerHTML = `
+                <div class="post-header">
+                    <div class="post-user-meta">
+                        <img src="${post.userPhoto || ''}" class="avatar">
+                        <div><h4>${post.userName || 'Usuario'}</h4><span>Comunidad</span></div>
+                    </div>
+                </div>
+                <div class="post-body"><p>${post.textContent}</p>${mediaHtml}</div>
+                <div class="post-footer-actions">
+                    <button class="action-btn like-btn ${isLiked ? 'active' : ''}"><i class="fa-solid fa-heart"></i> <span>${post.likesCount || 0}</span></button>
+                    <button class="action-btn comment-btn"><i class="fa-solid fa-comment"></i> <span>${post.commentsCount || 0}</span></button>
+                </div>
+                <div class="comments-section hidden">
+                    <div class="comment-input-box">
+                        <input type="text" placeholder="Escribe tu comentario..." class="c-input">
+                        <button class="btn-primary send-c-btn" style="padding:8px 16px; font-size:0.85rem;">Enviar</button>
+                    </div>
+                    <div class="comments-list"></div>
+                </div>`;
+
+            card.querySelector('.like-btn').addEventListener('click', async () => {
+                const currentLikes = post.likesCount || 0;
+                const updates = {};
+                if(isLiked) {
+                    updates[`posts/${post.id}/likesCount`] = currentLikes - 1;
+                    updates[`posts/${post.id}/likes/${auth.currentUser.uid}`] = null;
+                } else {
+                    updates[`posts/${post.id}/likesCount`] = currentLikes + 1;
+                    updates[`posts/${post.id}/likes/${auth.currentUser.uid}`] = true;
+                }
+                await update(ref(db), updates);
+            });
+
+            card.querySelector('.comment-btn').addEventListener('click', () => {
+                const sec = card.querySelector('.comments-section');
+                sec.classList.toggle('hidden');
+                if (!sec.classList.contains('hidden')) {
+                    onValue(ref(db, `posts/${post.id}/comments`), (snap) => {
+                        const list = card.querySelector('.comments-list');
+                        list.innerHTML = "";
+                        if(snap.exists()){
+                            snap.forEach(c => { list.innerHTML += `<div class="comment-element"><b>${c.val().userName || 'Anon'}:</b> ${c.val().commentText}</div>`; });
+                        }
+                    });
+                }
+            });
+
+            card.querySelector('.send-c-btn').addEventListener('click', async () => {
+                const input = card.querySelector('.c-input');
+                if (!input.value.trim()) return;
+                const commentRef = push(ref(db, `posts/${post.id}/comments`));
+                await set(commentRef, { uid: auth.currentUser.uid, userName: currentUserData?.name || "Usuario", commentText: input.value.trim(), createdAt: Date.now() });
+                await update(ref(db, `posts/${post.id}`), { commentsCount: (post.commentsCount || 0) + 1 });
+                input.value = "";
+            });
+
+            container.appendChild(card);
+        }
+
+        function initAppFeatures() {
+            const postsFeed = document.getElementById('posts-feed');
+            onValue(ref(db, "posts"), (snapshot) => {
+                postsFeed.innerHTML = "";
+                if(snapshot.exists()){
+                    let list = [];
+                    snapshot.forEach(child => { list.push(child.val()); });
+                    list.reverse().forEach(post => {
+                        const hasLiked = post.likes && post.likes[auth.currentUser.uid] ? true : false;
+                        buildFeedCard(post, postsFeed, hasLiked);
+                    });
+                }
+            });
+
+            const myPostsFeed = document.getElementById('my-posts-feed');
+            onValue(ref(db, "posts"), (snapshot) => {
+                myPostsFeed.innerHTML = "";
+                if(snapshot.exists()){
+                    let list = [];
+                    snapshot.forEach(child => { if(child.val().uid === auth.currentUser.uid) list.push(child.val()); });
+                    list.reverse().forEach(post => {
+                        const hasLiked = post.likes && post.likes[auth.currentUser.uid] ? true : false;
+                        buildFeedCard(post, myPostsFeed, hasLiked);
+                    });
+                }
+            });
+
+            const uGrid = document.getElementById('explore-users-grid');
+            const uList = document.getElementById('chat-users-list');
+            
+            // ESCUCHA CRUCIAL: Al usar onValue, si el usuario se elimina desde Realtime Database, la UI se actualiza al instante
+            onValue(ref(db, "users"), (snap) => {
+                uGrid.innerHTML = "";
+                uList.innerHTML = "";
+                if(!snap.exists()) return;
+
+                snap.forEach(uDoc => {
+                    const u = uDoc.val();
+                    if(u.uid === auth.currentUser.uid) return;
+
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-item-card';
+                    userCard.innerHTML = `
+                        <img src="${u.photoURL || ''}" class="avatar-large">
+                        <h4>${u.name || 'Usuario'}</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">${u.isOnline ? '🟢 En línea' : '⚪ Desconectado'}</p>
+                        <button class="btn-primary follow-btn">Conectar</button>`;
+                    uGrid.appendChild(userCard);
+
+                    const chatItem = document.createElement('div');
+                    chatItem.className = "nav-item";
+                    chatItem.style.padding = "10px";
+                    chatItem.innerHTML = `<img src="${u.photoURL || ''}" class="avatar" style="width:35px; height:35px;"> <span>${u.name || 'Usuario'}</span>`;
+                    
+                    chatItem.onclick = () => {
+                        activeChatUserId = u.uid;
+                        document.getElementById('chat-empty-view').classList.add('hidden');
+                        document.getElementById('chat-active-view').classList.remove('hidden');
+                        document.getElementById('chat-user-img').src = u.photoURL || '';
+                        document.getElementById('chat-user-name').innerText = u.name || 'Usuario';
+                        
+                        const room = [auth.currentUser.uid, u.uid].sort().join('_');
+                        onValue(ref(db, `chats/${room}/messages`), (mSnap) => {
+                            const container = document.getElementById('chat-messages-container');
+                            container.innerHTML = "";
+                            if(mSnap.exists()){
+                                mSnap.forEach(m => {
+                                    const data = m.val();
+                                    if (data.type === 'audio') {
+                                        container.innerHTML += `<div class="msg-bubble ${data.senderId === auth.currentUser.uid ? 'sent' : 'received'}"><audio src="${data.text}" controls style="max-width:220px; display:block;" preload="metadata" playsinline></audio></div>`;
+                                    } else {
+                                        container.innerHTML += `<div class="msg-bubble ${data.senderId === auth.currentUser.uid ? 'sent' : 'received'}">${data.text}</div>`;
+                                    }
+                                });
+                            }
+                            container.scrollTop = container.scrollHeight;
+                        });
+                    };
+                    uList.appendChild(chatItem);
+                });
+            });
+        }
+
+        document.getElementById('chat-send-btn').addEventListener('click', async () => {
+            const input = document.getElementById('chat-message-input');
+            if(!input.value.trim() || !activeChatUserId) return;
+            const room = [auth.currentUser.uid, activeChatUserId].sort().join('_');
+            const messageRef = push(ref(db, `chats/${room}/messages`));
+            await set(messageRef, { senderId: auth.currentUser.uid, text: input.value.trim(), type: 'text', createdAt: Date.now() });
+            input.value = "";
+        });
+
+        let mediaRecorder = null;
+        let audioChunks = [];
+        const micBtn = document.getElementById('chat-mic-btn');
+        
+        micBtn.addEventListener('click', async () => {
+            try {
+                if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                    audioChunks = [];
+                    audioStreamInstance = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                    
+                    mediaRecorder = new MediaRecorder(audioStreamInstance);
+                    mediaRecorder.ondataavailable = e => { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
+                    
+                    mediaRecorder.onstop = async () => {
+                        micBtn.classList.remove('recording');
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        if(audioStreamInstance) { audioStreamInstance.getTracks().forEach(track => track.stop()); }
+                        if(audioBlob.size < 2000) return;
+
+                        const file = new File([audioBlob], `voice_${Date.now()}.mp3`, { type: 'audio/mp3' });
+                        showNexusToast("Subiendo nota de voz...");
+                        try {
+                            const res = await uploadToCloudinary(file);
+                            const room = [auth.currentUser.uid, activeChatUserId].sort().join('_');
+                            const messageRef = push(ref(db, `chats/${room}/messages`));
+                            await set(messageRef, { senderId: auth.currentUser.uid, text: res.secure_url, type: 'audio', createdAt: Date.now() });
+                        } catch (e) { showNexusToast("No se pudo enviar el audio", true); }
+                    };
+                    
+                    mediaRecorder.start(250);
+                    micBtn.classList.add('recording');
+                    showNexusToast("Grabando audio...");
+                } else { mediaRecorder.stop(); }
+            } catch (micErr) {
+                showNexusToast("Acepta el permiso de micrófono en los ajustes de tu celular", true);
+            }
+        });
+
+        document.getElementById('global-search').addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            document.querySelectorAll('#posts-feed .post-card').forEach(c => {
+                c.classList.toggle('hidden', !c.querySelector('.post-body').innerText.toLowerCase().includes(val));
+            });
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+        });
+    </script>
+</body>
+</html>
+<style>
+    .nexus-apk-container {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92%;
+        max-width: 380px;
+        background: rgba(16, 23, 38, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 999999;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+    .nexus-apk-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .nexus-apk-icon {
+        font-size: 1.3rem;
+    }
+    .nexus-apk-text h5 {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #f1f5f9;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+    .nexus-apk-text p {
+        margin: 0;
+        font-size: 0.7rem;
+        color: #64748b;
+    }
+    .nexus-btn-download {
+        background: #4f46e5;
+        color: #ffffff;
+        border: none;
+        padding: 8px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .nexus-btn-close {
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 1rem;
+        padding: 2px 4px;
+    }
+</style>
+
+<div id="nexus-apk-banner" class="nexus-apk-container">
+    <div class="nexus-apk-info">
+        <div class="nexus-apk-icon">🤖</div>
+        <div class="nexus-apk-text">
+            <h5>Nexus para Android</h5>
+            <p>Descarga la app oficial (.APK)</p>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="TU_ENLACE_DE_DESCARGA_AQUÍ" class="nexus-btn-download">Descargar</a>
+        <button id="nexus-close-btn" class="nexus-btn-close">✕</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('nexus-close-btn').addEventListener('click', function() {
+        document.getElementById('nexus-apk-banner').style.display = 'none';
+    });
+</script>
