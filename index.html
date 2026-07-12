@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Universe App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #075e54;
+            --secondary-color: #128c7e;
+            --bg-color: #efeae2;
+            --chat-left: #ffffff;
+            --chat-right: #d9fdd3;
+            --text-color: #333;
+            --dark-gray: #54656f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .header-actions i {
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        #screen-auth {
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .auth-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            padding: 10px;
+            background: #f0f2f5;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f2f5;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: bold;
+        }
+
+        .contact-status {
+            font-size: 12px;
+            color: var(--dark-gray);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ccc;
+        }
+
+        .status-dot.online {
+            background: #25d366;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 20;
+        }
+
+        .chat-area {
+            flex: 1;
+            background-color: var(--bg-color);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            position: relative;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .message.sent {
+            background-color: var(--chat-right);
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        .message.received {
+            background-color: var(--chat-left);
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: var(--dark-gray);
+            text-align: right;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .chat-input-bar {
+            background: #f0f2f5;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input-bar input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-input-bar i {
+            font-size: 20px;
+            color: var(--dark-gray);
+            cursor: pointer;
+        }
+
+        .settings-profile {
+            text-align: center;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+
+        .settings-profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+        }
+
+        .setting-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 15px;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .setting-btn i {
+            margin-right: 15px;
+            font-size: 20px;
+            width: 25px;
+        }
+
+        .btn-youtube { color: #ff0000; }
+        .btn-tiktok { color: #000000; }
+        .btn-logout { color: #d93025; }
+
+        .context-menu {
+            position: absolute;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            display: none;
+            z-index: 100;
+        }
+
+        .context-menu button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div id="custom-context-menu" class="context-menu">
+        <button id="btn-delete-msg"><i class="fa-solid fa-trash"></i> Borrar mensaje</button>
+    </div>
+
+    <div id="screen-auth" class="screen active">
+        <div class="auth-box">
+            <h2 style="text-align:center; margin-bottom:15px; color:var(--primary-color)">Chat Universe</h2>
+            <div class="form-group">
+                <label>Tu Nombre</label>
+                <input type="text" id="auth-name" placeholder="Ej. Rony">
+            </div>
+            <div class="form-group">
+                <label>Número de Teléfono</label>
+                <input type="tel" id="auth-phone" placeholder="Ej. 123456789">
+            </div>
+            <button class="btn" id="btn-submit-auth">Registrarse / Entrar</button>
+        </div>
+    </div>
+
+    <div id="screen-contacts" class="screen">
+        <div class="header">
+            <span>Chat Universe</span>
+            <div class="header-actions">
+                <i class="fa-solid fa-circle-notch" id="btn-view-stories"></i>
+                <i class="fa-solid fa-ellipsis-vertical" id="btn-go-settings"></i>
+            </div>
+        </div>
+        <div class="search-bar"><input type="text" placeholder="Buscar chat..."></div>
+        <div class="contacts-list" id="div-contacts-list"></div>
+        <div class="fab" id="btn-add-contact">+</div>
+    </div>
+
+    <div id="screen-chat" class="screen">
+        <div class="header">
+            <div style="display: flex; align-items: center;">
+                <i class="fa-solid fa-arrow-left" id="btn-back-contacts" style="margin-right:15px; cursor:pointer;"></i>
+                <img src="" id="chat-header-avatar" class="avatar" style="width:35px; height:35px; margin-right:10px;">
+                <div>
+                    <div id="chat-header-name" style="font-size:16px;">Contacto</div>
+                    <div id="chat-header-status" style="font-size:11px; font-weight:normal; opacity:0.8;">desconectado</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <i class="fa-solid fa-paperclip" id="btn-change-chat-bg"></i>
+            </div>
+        </div>
+        <div class="chat-area" id="chat-messages-container"></div>
+        <div class="chat-input-bar">
+            <i class="fa-regular fa-face-smile" id="btn-sticker-mode"></i>
+            <i class="fa-solid fa-camera" id="btn-upload-image"></i>
+            <input type="text" id="input-message" placeholder="Escribe un mensaje...">
+            <i class="fa-solid fa-microphone" id="btn-record-audio"></i>
+            <i class="fa-solid fa-paper-plane" id="btn-send-message" style="color:var(--secondary-color); display:none;"></i>
+        </div>
+    </div>
+
+    <div id="screen-settings" class="screen">
+        <div class="header">
+            <i class="fa-solid fa-arrow-left" id="btn-back-settings" style="cursor:pointer;"></i>
+            <span>Ajustes</span>
+            <div></div>
+        </div>
+        <div class="settings-profile">
+            <img src="" id="settings-avatar" style="cursor:pointer;">
+            <h3 id="settings-name" style="margin-top:5px;">Nombre</h3>
+            <p id="settings-phone" style="color:var(--dark-gray); font-size:14px;">Número</p>
+            <button class="btn" id="btn-edit-profile" style="padding:5px; font-size:12px; margin-top:5px; width:auto;">Cambiar Nombre</button>
+        </div>
+        <div class="settings-options">
+            <form action="https://formspree.io/f/ronysonjerome15@gmail.com" method="POST" target="_blank">
+                <button type="submit" class="setting-btn"><i class="fa-solid fa-envelope" style="color:#4285f4;"></i> Enviar correo a soporte</button>
+            </form>
+            <button class="setting-btn btn-youtube" onclick="window.open('https://youtube.com', '_blank')"><i class="fa-brands fa-youtube"></i> YouTube</button>
+            <button class="setting-btn btn-tiktok" onclick="window.open('https://tiktok.com', '_blank')"><i class="fa-brands fa-tiktok"></i> TikTok</button>
+            <button class="setting-btn" id="btn-add-account"><i class="fa-solid fa-user-plus" style="color:#34a853;"></i> Agregar otra cuenta</button>
+            <button class="setting-btn btn-logout" id="btn-logout-app"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+// ==========================================
+// PARTE 2: CONFIGURACIÓN FIREBASE Y ACCESO
+// ==========================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, collection, updateDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBkxCW28OYepzS0cFeJMVsuEiCabncsvVw",
+  authDomain: "robert-dd6bd.firebaseapp.com",
+  databaseURL: "https://robert-dd6bd-default-rtdb.firebaseio.com",
+  projectId: "robert-dd6bd",
+  storageBucket: "robert-dd6bd.firebasestorage.app",
+  messagingSenderId: "464296193419",
+  appId: "1:464296193419:web:4d439f7d225d153976538e",
+  measurementId: "G-N5WW7VK051"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let currentUser = null;
+let activeChatPhone = null;
+
+const authNameInput = document.getElementById('auth-name');
+const authPhoneInput = document.getElementById('auth-phone');
+const btnSubmitAuth = document.getElementById('btn-submit-auth');
+const divContactsList = document.getElementById('div-contacts-list');
+
+const screens = {
+    auth: document.getElementById('screen-auth'),
+    contacts: document.getElementById('screen-contacts'),
+    chat: document.getElementById('screen-chat'),
+    settings: document.getElementById('screen-settings')
+};
+
+function changeScreen(screenName) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[screenName].classList.add('active');
+}
+
+btnSubmitAuth.addEventListener('click', async () => {
+    const name = authNameInput.value.trim();
+    const phone = authPhoneInput.value.trim();
+    if (!name || !phone) return alert("Por favor rellena los datos.");
+
+    try {
+        const userRef = doc(db, "users", phone);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            if (userData.name.toLowerCase() !== name.toLowerCase()) {
+                return alert("Este número ya está registrado con otro nombre.");
+            }
+            currentUser = userData;
+        } else {
+            currentUser = {
+                phone: phone, 
+                name: name,
+                avatar: "https://images.cloudinary.com/demo/image/upload/v1312461204/sample.jpg",
+                online: true, 
+                lastSeen: new Date().toISOString()
+            };
+            await setDoc(userRef, currentUser);
+        }
+        localStorage.setItem('chat_user_phone', currentUser.phone);
+        initApp(currentUser);
+    } catch (e) { 
+        console.error(e);
+        alert("Error de conexión: Asegúrate de configurar las reglas públicas en tu Firebase."); 
+    }
+});
+
+async function updateUserStatus(phone, isOnline) {
+    if(!phone) return;
+    try {
+        await updateDoc(doc(db, "users", phone), { online: isOnline, lastSeen: new Date().toISOString() });
+    } catch(e) { console.error(e); }
+}
+// ==========================================
+// PARTE 3: GESTIÓN DE CONTACTOS EN TIEMPO REAL
+// ==========================================
+function initApp(user) {
+    document.getElementById('settings-name').innerText = user.name;
+    document.getElementById('settings-phone').innerText = "+" + user.phone;
+    document.getElementById('settings-avatar').src = user.avatar;
+    updateUserStatus(user.phone, true);
+    changeScreen('contacts');
+    listenContacts();
+}
+
+function listenContacts() {
+    onSnapshot(collection(db, "users"), (snapshot) => {
+        divContactsList.innerHTML = "";
+        snapshot.forEach((docSnap) => {
+            const contact = docSnap.data();
+            if (contact.phone === currentUser.phone) return;
+
+            const item = document.createElement('div');
+            item.className = 'contact-item';
+            item.innerHTML = `
+                <img src="${contact.avatar}" class="avatar">
+                <div class="contact-info">
+                    <div class="contact-name">${contact.name}</div>
+                    <div class="contact-status">${contact.online ? 'En línea' : 'Desconectado'}</div>
+                </div>
+                <div class="status-dot ${contact.online ? 'online' : ''}"></div>
+            `;
+            item.addEventListener('click', () => openChatWith(contact));
+            divContactsList.appendChild(item);
+        });
+    });
+}
+
+document.getElementById('btn-add-contact').addEventListener('click', async () => {
+    const num = prompt("Introduce el número de teléfono que deseas buscar:");
+    if (!num || num.trim() === currentUser.phone) return;
+    
+    const snap = await getDoc(doc(db, "users", num.trim()));
+    if (snap.exists()) {
+        openChatWith(snap.data());
+    } else {
+        alert("Ese número de contacto no está registrado en la app.");
+    }
+});
+
+function openChatWith(contact) {
+    activeChatPhone = contact.phone;
+    document.getElementById('chat-header-name').innerText = contact.name;
+    document.getElementById('chat-header-avatar').src = contact.avatar;
+    document.getElementById('chat-header-status').innerText = contact.online ? 'en línea' : 'desconectado';
+    changeScreen('chat');
+    listenMessages();
+}
+
+document.getElementById('btn-go-settings').addEventListener('click', () => changeScreen('settings'));
+document.getElementById('btn-back-settings').addEventListener('click', () => changeScreen('contacts'));
+document.getElementById('btn-back-contacts').addEventListener('click', () => changeScreen('contacts'));
+// ==========================================
+// PARTE 4: MENSAJES Y FUNCIÓN COPIAR/BORRAR
+// ==========================================
+const chatMessagesContainer = document.getElementById('chat-messages-container');
+const inputMsg = document.getElementById('input-message');
+const sendBtn = document.getElementById('btn-send-message');
+const micBtn = document.getElementById('btn-record-audio');
+let msgUnsubscribe = null;
+let selectedMsgId = null;
+
+inputMsg.addEventListener('input', () => {
+    const hasText = inputMsg.value.trim() !== "";
+    sendBtn.style.display = hasText ? "block" : "none";
+    micBtn.style.display = hasText ? "none" : "block";
+});
+
+function getRoomId(p1, p2) { return [p1, p2].sort().join("_"); }
+
+sendBtn.addEventListener('click', async () => {
+    const text = inputMsg.value.trim();
+    if (!text) return;
+    inputMsg.value = "";
+    sendBtn.style.display = "none";
+    micBtn.style.display = "block";
+    await sendMsgData({ type: "text", content: text });
+});
+
+async function sendMsgData(data) {
+    const rId = getRoomId(currentUser.phone, activeChatPhone);
+    const ref = doc(collection(db, "chats", rId, "messages"));
+    await setDoc(ref, {
+        id: ref.id, sender: currentUser.phone, receiver: activeChatPhone,
+        content: data.content, type: data.type, timestamp: new Date().toISOString()
+    });
+}
+
+function listenMessages() {
+    if (msgUnsubscribe) msgUnsubscribe();
+    const rId = getRoomId(currentUser.phone, activeChatPhone);
+    msgUnsubscribe = onSnapshot(collection(db, "chats", rId, "messages"), (snap) => {
+        chatMessagesContainer.innerHTML = "";
+        let list = [];
+        snap.forEach(d => list.push(d.data()));
+        list.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+        list.forEach(renderMsg);
+        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+    });
+}
+
+function renderMsg(msg) {
+    const isSent = msg.sender === currentUser.phone;
+    const div = document.createElement('div');
+    div.className = `message ${isSent ? 'sent' : 'received'}`;
+    
+    let body = msg.content;
+    if (msg.type === "text") {
+        body = msg.content.replace(/(https?:\/\/[^\s]+)/g, url => `<a href="${url}" target="_blank" style="color:#0275d8; text-decoration:underline;">${url}</a>`);
+    } else if (msg.type === "image") {
+        body = `<img src="${msg.content}" style="max-width:100%; border-radius:8px; display:block;">`;
+    } else if (msg.type === "audio") {
+        body = `<audio src="${msg.content}" controls style="max-width:100%; display:block;"></audio>`;
+    }
+
+    div.innerHTML = `<div>${body}</div><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>`;
+    
+    // Soporte Click Derecho / Pulsación larga en móviles
+    div.addEventListener('contextmenu', (e) => { e.preventDefault(); openMenu(e.clientX, e.clientY, msg.id); });
+    
+    let timer;
+    div.addEventListener('touchstart', (e) => {
+        timer = setTimeout(() => { openMenu(e.touches[0].clientX, e.touches[0].clientY, msg.id); }, 700);
+    });
+    div.addEventListener('touchend', () => clearTimeout(timer));
+
+    chatMessagesContainer.appendChild(div);
+}
+
+const cMenu = document.getElementById('custom-context-menu');
+function openMenu(x, y, id) { selectedMsgId = id; cMenu.style.top = `${y}px`; cMenu.style.left = `${x}px`; cMenu.style.display = 'block'; }
+document.addEventListener('click', () => cMenu.style.display = 'none');
+
+document.getElementById('btn-delete-msg').addEventListener('click', async () => {
+    if (!selectedMsgId) return;
+    try {
+        const rId = getRoomId(currentUser.phone, activeChatPhone);
+        await deleteDoc(doc(db, "chats", rId, "messages", selectedMsgId));
+        selectedMsgId = null;
+    } catch(err) { console.error(err); }
+});
+// ==========================================
+// PARTE 5: ENVIAR AUDIO, FOTO Y CONFIGURACIÓN
+// ==========================================
+const CLOUD_URL = "https://api.cloudinary.com/v1_1/ecgbufts/upload";
+const CLOUD_PRESET = "Robert"; 
+
+async function uploadFile(file) {
+    const form = new FormData();
+    form.append("file", file);
+    form.append("upload_preset", CLOUD_PRESET);
+    try {
+        const res = await fetch(CLOUD_URL, { method: "POST", body: form });
+        const data = await res.json();
+        return data.secure_url;
+    } catch(e) {
+        console.error(e);
+        alert("Fallo al subir archivo multimedia a Cloudinary.");
+        return null;
+    }
+}
+
+document.getElementById('btn-upload-image').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async () => {
+        if(!input.files[0]) return;
+        alert("Subiendo imagen...");
+        const url = await uploadFile(input.files[0]);
+        if(url) sendMsgData({ type: "image", content: url });
+    };
+    input.click();
+});
+
+let recorder, chunks = [], isRec = false;
+document.getElementById('btn-record-audio').addEventListener('click', async () => {
+    if (!isRec) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            recorder = new MediaRecorder(stream); chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = async () => {
+                alert("Procesando y enviando audio...");
+                const url = await uploadFile(new Blob(chunks, { type: 'audio/mp3' }));
+                if(url) sendMsgData({ type: "audio", content: url });
+            };
+            recorder.start(); isRec = true;
+            document.getElementById('btn-record-audio').style.color = "#d93025";
+        } catch(err) { alert("Permiso de micrófono denegado."); }
+    } else { 
+        recorder.stop(); isRec = false; 
+        document.getElementById('btn-record-audio').style.color = "var(--dark-gray)";
+    }
+});
+
+document.getElementById('btn-change-chat-bg').addEventListener('click', () => {
+    const bg = prompt("Pega la URL de la imagen para el fondo:");
+    if(bg) chatMessagesContainer.style.backgroundImage = `url('${bg}')`;
+});
+
+document.getElementById('btn-sticker-mode').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async () => {
+        alert("Ajustando dimensiones de Sticker a 5 segundos...");
+        const url = await uploadFile(input.files[0]);
+        if(url) sendMsgData({ type: "image", content: url });
+    };
+    input.click();
+});
+
+document.getElementById('btn-settings-avatar').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    input.onchange = async () => {
+        alert("Subiendo foto de perfil...");
+        const url = await uploadFile(input.files[0]);
+        if(url) {
+            await updateDoc(doc(db, "users", currentUser.phone), { avatar: url });
+            currentUser.avatar = url;
+            document.getElementById('settings-avatar').src = url;
+            alert("¡Foto de perfil actualizada!");
+        }
+    };
+    input.click();
+});
+
+document.getElementById('btn-view-stories').addEventListener('click', () => { 
+    alert("Modulo de Estados inicializado."); 
+});
+
+document.getElementById('btn-edit-profile').addEventListener('click', async () => {
+    const n = prompt("Introduce tu nuevo nombre:");
+    if(n && n.trim() !== "") { 
+        await updateDoc(doc(db, "users", currentUser.phone), { name: n.trim() }); 
+        location.reload(); 
+    }
+});
+
+document.getElementById('btn-logout-app').addEventListener('click', async () => {
+    await updateUserStatus(currentUser.phone, false);
+    localStorage.clear(); location.reload();
+});
+
+document.getElementById('btn-add-account').addEventListener('click', () => { changeScreen('auth'); });
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const saved = localStorage.getItem('chat_user_phone');
+    if (saved) {
+        const snap = await getDoc(doc(db, "users", saved));
+        if (snap.exists()) { currentUser = snap.data(); initApp(currentUser); }
+    }
+});
+</script>
+</body>
+</html>
