@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StickerVerse Studio Premium</title>
+    <title>StickerVerse Engine Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS PREMIUM DE PRODUCCIÓN AUTOMÁTICO */
         :root {
-            --bg-dark: #080c14;
-            --bg-surface: #111827;
-            --bg-field: #030712;
+            --bg-main: #060913;
+            --bg-surface: #0f1424;
+            --bg-field: #03050a;
             --accent: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.2);
-            --text-white: #f9fafb;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --text-white: #f3f4f6;
             --text-gray: #9ca3af;
-            --border-glow: rgba(255, 255, 255, 0.05);
-            --radius-custom: 18px;
+            --border: rgba(255, 255, 255, 0.05);
+            --radius: 12px;
         }
 
         * {
@@ -27,25 +25,25 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-main);
             color: var(--text-white);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
         }
 
-        /* Sistema Anti-Vibración de Páginas */
+        /* Sistema Intercambiador de Páginas */
         .page {
             display: none;
             opacity: 0;
             transform: scale(0.99);
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            max-width: 1200px;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            max-width: 800px;
             width: 100%;
             margin: 0 auto;
-            padding: 32px 24px;
+            padding: 20px 16px;
         }
 
         .page.active {
@@ -54,142 +52,119 @@
             transform: scale(1);
         }
 
-        /* Componente de Alerta Profesional (Toast Notification) */
+        /* Alertas Flotantes Premium Toast */
         #toast-container {
             position: fixed;
-            top: 24px;
-            right: 24px;
+            top: 16px;
+            right: 16px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             pointer-events: none;
         }
 
         .toast {
-            background: rgba(17, 24, 39, 0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 16px 20px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-white);
-            font-size: 14px;
-            font-weight: 600;
-            min-width: 300px;
-            max-width: 450px;
-            pointer-events: auto;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast-icon {
-            font-size: 18px;
-        }
-        .toast-success .toast-icon { color: var(--accent); }
-        .toast-error .toast-icon { color: #ef4444; }
-        .toast-info .toast-icon { color: #3b82f6; }
-
-        /* Navegación Superior */
-        header {
-            background: rgba(17, 24, 39, 0.75);
+            background: rgba(15, 20, 36, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-glow);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 280px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+            pointer-events: auto;
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-success .toast-icon { color: var(--accent); }
+        .toast-error .toast-icon { color: #f43f5e; }
+        .toast-info .toast-icon { color: #3b82f6; }
+
+        /* Barra de Navegación Compacta */
+        header {
+            background: rgba(15, 20, 36, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .header-wrap {
-            max-width: 1200px;
+        .header-container {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 16px 24px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: -0.5px;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 800;
             cursor: pointer;
-            background: linear-gradient(90deg, #10b981, #34d399, #60a5fa);
+            background: linear-gradient(90deg, #10b981, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .logo-box {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .brand i {
+            background: var(--accent);
+            -webkit-background-clip: initial;
             -webkit-text-fill-color: initial;
-            color: #080c14;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 16px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            color: #060913;
+            padding: 6px 8px;
+            border-radius: 8px;
+            font-size: 13px;
         }
 
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        nav { display: flex; align-items: center; gap: 12px; }
 
-        /* Botones unificados */
+        /* Botones Globales */
         .btn {
             background: linear-gradient(135deg, #10b981, #059669);
-            color: #080c14;
+            color: #060913;
             border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.2s ease;
         }
 
         .btn:hover {
             filter: brightness(1.1);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--accent-glow);
         }
 
         .btn-alt {
             background: rgba(255, 255, 255, 0.03);
             color: var(--text-white);
-            border: 1px solid var(--border-glow);
+            border: 1px solid var(--border);
         }
 
-        .btn-alt:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-logout {
-            background: rgba(239, 68, 68, 0.08);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            padding: 12px;
-        }
-
-        .btn-logout:hover {
-            background: rgba(239, 68, 68, 0.18);
+        .btn-danger {
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.15);
+            padding: 8px;
         }
 
         .hidden { display: none !important; }
@@ -200,16 +175,16 @@
     <div id="toast-container"></div>
 
     <header>
-        <div class="header-wrap">
-            <div class="logo" onclick="showPage('feed-page')">
-                <div class="logo-box"><i class="fa-solid fa-bolt"></i></div>
+        <div class="header-container">
+            <div class="brand" onclick="showPage('feed-page')">
+                <i class="fa-solid fa-layer-group"></i>
                 <span>StickerVerse</span>
             </div>
             <nav id="user-nav" class="hidden">
                 <button onclick="showPage('create-page')" class="btn">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Nuevo Sticker
+                    <i class="fa-solid fa-scissors"></i> Crear
                 </button>
-                <button onclick="logout()" class="btn btn-logout">
+                <button onclick="logout()" class="btn btn-danger">
                     <i class="fa-solid fa-power-off"></i>
                 </button>
             </nav>
@@ -218,272 +193,368 @@
 
     <main style="flex-grow: 1; display: flex; align-items: center; width: 100%;">
     <style>
-        /* CSS DE TARJETAS, FORMULARIOS Y DROPZONE (Parte 2) */
-        .panel-card {
+        /* DISEÑO DE PANELES Y LISTA COMPACTA (Parte 2) */
+        .app-card {
             background: var(--bg-surface);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-custom);
-            padding: 32px;
-            max-width: 440px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            max-width: 400px;
             width: 100%;
-            margin: 40px auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 16px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
-        .auth-selector {
+        .tab-bar {
             display: flex;
             background: var(--bg-field);
-            padding: 6px;
-            border-radius: 14px;
-            margin-bottom: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
         }
 
-        .selector-btn {
+        .tab-item {
             flex: 1;
             background: transparent;
             color: var(--text-gray);
             border: none;
-            padding: 12px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.2s ease;
+            border-radius: 6px;
         }
 
-        .selector-btn.active {
+        .tab-item.active {
             background: var(--accent);
-            color: var(--bg-dark);
+            color: var(--bg-main);
         }
 
-        .field-group {
-            margin-bottom: 24px;
+        .form-group {
+            margin-bottom: 16px;
         }
 
-        .field-group label {
+        .form-group label {
             display: block;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
             color: var(--text-gray);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 700;
         }
 
-        .input-control {
+        .form-input {
             width: 100%;
             background: var(--bg-field);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 16px;
+            border: 1px solid var(--border);
+            padding: 12px;
             color: var(--text-white);
-            border-radius: 12px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 14px;
             outline: none;
-            transition: all 0.2s ease;
         }
 
-        .input-control:focus {
+        .form-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent);
         }
 
-        .forgot-wrap {
-            text-align: right;
-            margin-top: -12px;
-            margin-bottom: 24px;
-        }
-
-        .forgot-wrap button {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 13px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Feed de la Comunidad */
-        .feed-container {
+        /* DISEÑO COMPACTO VERTICAL (Uno debajo de otro, poco espacio) */
+        .feed-header {
+            background: var(--bg-surface);
+            padding: 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            background: rgba(17, 24, 39, 0.4);
-            padding: 28px;
-            border-radius: var(--radius-custom);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 36px;
         }
 
-        .stickers-masonry {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 28px;
-            width: 100%;
-        }
-
-        .sticker-item {
-            background: var(--bg-surface);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: var(--radius-custom);
-            padding: 18px;
+        .compact-list {
             display: flex;
             flex-direction: column;
+            gap: 10px; /* Separación pequeña para ahorrar espacio */
+            width: 100%;
+        }
+
+        .sticker-row {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 16px;
         }
 
-        .sticker-item:hover {
-            transform: translateY(-5px);
-            border-color: rgba(16, 185, 129, 0.3);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .viewer-box {
-            width: 100%;
-            height: 160px;
+        .sticker-preview-mini {
+            width: 55px;
+            height: 55px;
+            background: var(--bg-field);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border-radius: 12px;
-            background: var(--bg-field);
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            flex-shrink: 0;
         }
 
-        .viewer-box img, .viewer-box video {
+        .sticker-preview-mini img, .sticker-preview-mini video {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
         }
 
-        .meta-title {
+        .sticker-info-mini {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .sticker-info-mini h4 {
             font-size: 14px;
             font-weight: 700;
-            margin: 14px 0;
-            text-align: center;
-            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Dropzone Avanzado */
-        .uploader-area {
-            border: 2px dashed rgba(255, 255, 255, 0.15);
+        .sticker-info-mini span {
+            font-size: 11px;
+            color: var(--text-gray);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .btn-mini {
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+    </style>
+
+    <section id="auth-page" class="page active">
+        <div class="app-card">
+            <div class="tab-bar" id="auth-tabs">
+                <button onclick="toggleAuthMode('login')" id="tab-login" class="tab-item active">Entrar</button>
+                <button onclick="toggleAuthMode('register')" id="tab-register" class="tab-item">Registro</button>
+            </div>
+
+            <form id="auth-form" onsubmit="handleAuth(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="auth-email" required class="form-input">
+                </div>
+                <div class="form-group" id="password-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="auth-password" class="form-input">
+                </div>
+                
+                <div style="text-align: right; margin-bottom: 16px;">
+                    <button type="button" onclick="toggleAuthMode('forgot')" style="background:none; border:none; color:var(--accent); font-size:12px; cursor:pointer;">¿Olvidaste tu contraseña?</button>
+                </div>
+
+                <button type="submit" id="auth-btn" class="btn" style="width: 100%; justify-content: center; padding: 12px;">
+                    Acceder
+                </button>
+            </form>
+
+            <button id="back-to-login" onclick="toggleAuthMode('login')" class="btn btn-alt hidden" style="width: 100%; justify-content: center; margin-top: 12px; font-size: 12px;">
+                <i class="fa-solid fa-arrow-left"></i> Regresar
+            </button>
+        </div>
+    </section>
+
+    <section id="feed-page" class="page">
+        <div class="feed-header">
+            <div>
+                <h3 style="font-size: 18px; font-weight: 800;">Mis Stickers</h3>
+                <p style="color: var(--text-gray); font-size: 11px;">Formato de lista optimizada</p>
+            </div>
+            <button onclick="showPage('import-page')" class="btn btn-alt btn-mini">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp (.webp)
+            </button>
+        </div>
+        
+        <div id="stickers-grid" class="compact-list"></div>
+    </section>
+    <style>
+        /* CONTROLADORES DE EDICIÓN Y AJUSTES (Parte 3) */
+        .dropzone-container {
+            border: 2px dashed rgba(255, 255, 255, 0.12);
             background: var(--bg-field);
-            padding: 44px 24px;
-            border-radius: var(--radius-custom);
+            padding: 24px 16px;
+            border-radius: var(--radius);
             text-align: center;
             position: relative;
             cursor: pointer;
-            transition: border-color 0.2s ease;
+            margin-bottom: 16px;
         }
 
-        .uploader-area:hover {
-            border-color: var(--accent);
-        }
-
-        .uploader-area input[type="file"] {
+        .dropzone-container input[type="file"] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
             width: 100%;
             height: 100%;
+            z-index: 5;
+        }
+
+        .editor-controls-box {
+            background: var(--bg-field);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 14px;
+        }
+
+        .control-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-header-flex span {
+            font-size: 11px;
+            color: var(--text-gray);
+            font-weight: 700;
+        }
+
+        .range-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Lienzo de Previsualización con Texto en tiempo real */
+        .canvas-preview-frame {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .canvas-text-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            text-align: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 14px;
+            text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+            pointer-events: none;
+            word-wrap: break-word;
             z-index: 10;
         }
     </style>
 
-    <section id="auth-page" class="page active">
-        <div class="panel-card">
-            <div class="auth-selector" id="auth-tabs">
-                <button onclick="toggleAuthMode('login')" id="tab-login" class="selector-btn active">Ingresar</button>
-                <button onclick="toggleAuthMode('register')" id="tab-register" class="selector-btn">Registrarse</button>
-            </div>
-
-            <form id="auth-form" onsubmit="handleAuth(event)">
-                <div class="field-group">
-                    <label>Correo Electrónico</label>
-                    <input type="email" id="auth-email" required class="input-control">
-                </div>
-                <div class="field-group" id="password-group">
-                    <label>Contraseña</label>
-                    <input type="password" id="auth-password" class="input-control">
-                </div>
-                
-                <div class="forgot-wrap" id="forget-password-link">
-                    <button type="button" onclick="toggleAuthMode('forgot')">¿Olvidaste tu contraseña?</button>
-                </div>
-
-                <button type="submit" id="auth-btn" class="btn" style="width: 100%; justify-content: center; padding: 16px;">
-                    Entrar al Estudio
-                </button>
-            </form>
-
-            <button id="back-to-login" onclick="toggleAuthMode('login')" class="btn btn-alt hidden" style="width: 100%; justify-content: center; margin-top: 16px;">
-                <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
-            </button>
-        </div>
-    </section>
-
-    <section id="feed-page" class="page">
-        <div class="feed-container">
-            <div>
-                <h2 style="font-size: 28px; font-weight: 900; letter-spacing: -0.5px;">Galería de Diseños</h2>
-                <p style="color: var(--text-gray); font-size: 14px; margin-top: 4px;">Explora y descarga stickers estáticos y animados.</p>
-            </div>
-            <button onclick="showPage('import-page')" class="btn btn-alt">
-                <i class="fa-brands fa-whatsapp" style="color: #10b981;"></i> Importar .webp
-            </button>
-        </div>
-        <div id="stickers-grid" class="stickers-masonry"></div>
-    </section>
-
-    <section id="create-page" class="page" style="max-width: 600px;">
-        <div class="panel-card" style="max-width: 100%; margin: 0;">
-            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+    <section id="create-page" class="page" style="max-width: 480px;">
+        <div class="app-card" style="max-width: 100%; margin: 0;">
+            <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent);"></i>
-                <span>Estudio Avanzado</span>
-            </h2>
+                <span>Estudio del Sticker</span>
+            </h3>
+            
             <form onsubmit="handleCreateSticker(event)">
-                <div class="field-group">
-                    <div class="uploader-area">
+                <div class="form-group">
+                    <div class="dropzone-container">
                         <input type="file" id="sticker-file" accept="image/*,video/mp4" onchange="previewFile(event)" required>
+                        
                         <div id="dropzone-prompt">
-                            <i class="fa-solid fa-photo-film" style="font-size: 32px; color: var(--text-gray); margin-bottom: 14px;"></i>
-                            <p style="font-size: 15px; font-weight: 700;">Arrastra fotos o fragmentos MP4</p>
-                            <p style="font-size: 12px; color: var(--text-gray); margin-top: 4px;">Las animaciones se validan a un máximo de 5 segundos</p>
+                            <i class="fa-solid fa-photo-film" style="font-size: 24px; color: var(--text-gray); margin-bottom: 8px;"></i>
+                            <p style="font-size: 13px; font-weight: 700;">Seleccionar Foto o Video</p>
                         </div>
+
                         <div id="preview-container" class="hidden">
-                            <div id="media-preview" style="width: 150px; height: 150px; margin: 0 auto; display: flex; align-items: center; justify-content: center;"></div>
-                            <button type="button" onclick="resetPreview(event)" class="btn btn-logout" style="margin-top: 16px; padding: 8px 16px; font-size: 12px;">Remover Archivo</button>
+                            <div class="canvas-preview-frame" id="canvas-frame">
+                                <div id="media-preview" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;"></div>
+                                <div id="sticker-text-render" class="canvas-text-overlay"></div>
+                            </div>
+                            <button type="button" onclick="resetPreview(event)" class="btn btn-danger" style="margin-top: 10px; padding: 4px 10px; font-size: 11px;">Cambiar multimedia</button>
                         </div>
                     </div>
                 </div>
-                <div class="field-group">
-                    <label>Título del Sticker</label>
-                    <input type="text" id="sticker-name" required placeholder="Ej: Animación Épica 🔥" class="input-control">
+
+                <div class="editor-controls-box">
+                    <div class="control-row">
+                        <label style="font-size: 11px; font-weight:700; color:var(--text-gray);">Texto del Sticker</label>
+                        <input type="text" id="sticker-text-input" placeholder="Escribe el meme aquí..." class="form-input" style="padding: 8px 12px; font-size:13px;" oninput="updateStickerText(this.value)">
+                    </div>
+
+                    <div class="control-row">
+                        <div class="control-header-flex">
+                            <label style="font-size: 11px; font-weight:700; color:var(--text-gray);">Escala / Tamaño</label>
+                            <span id="size-val">100%</span>
+                        </div>
+                        <input type="range" id="sticker-size-slider" min="50" max="100" value="100" class="range-slider" oninput="updateStickerSize(this.value)">
+                    </div>
+
+                    <div class="control-row" id="duration-control-row">
+                        <div class="control-header-flex">
+                            <label style="font-size: 11px; font-weight:700; color:var(--text-gray);">Duración del Clip</label>
+                            <span id="duration-val">5.0s</span>
+                        </div>
+                        <input type="range" id="sticker-duration-slider" min="1" max="5" value="5" step="0.1" class="range-slider" oninput="document.getElementById('duration-val').innerText = this.value + 's'">
+                    </div>
                 </div>
-                <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 16px;">Subir e Inyectar a la Galería</button>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>Nombre del Archivo</label>
+                    <input type="text" id="sticker-name" required placeholder="Ej: MiStickerMeme" class="form-input">
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 12px;">Generar y Guardar</button>
             </form>
         </div>
     </section>
 
-    <section id="import-page" class="page" style="max-width: 500px; text-align: center;">
-        <div class="panel-card" style="max-width: 100%; margin: 0; display: flex; flex-direction: column; gap: 18px;">
-            <i class="fa-brands fa-whatsapp" style="font-size: 56px; color: var(--accent);"></i>
-            <h2 style="font-size: 24px; font-weight: 900;">Mudar desde WhatsApp</h2>
-            <p style="color: var(--text-gray); font-size: 14px;">Sincroniza tus stickers guardados subiendo su archivo estructurado original de formato nativo .webp</p>
-            <div class="uploader-area" style="padding: 30px;">
+    <section id="import-page" class="page" style="max-width: 400px; text-align: center;">
+        <div class="app-card" style="max-width: 100%; margin: 0; display: flex; flex-direction: column; gap: 14px;">
+            <i class="fa-brands fa-whatsapp" style="font-size: 40px; color: var(--accent);"></i>
+            <h3 style="font-size: 18px; font-weight: 800;">Subir desde WhatsApp</h3>
+            <p style="color: var(--text-gray); font-size: 12px;">Sube un sticker con formato nativo .webp exportado de tus chats para agregarlo a la lista.</p>
+            
+            <div class="dropzone-container" style="padding: 20px;">
                 <input type="file" id="whatsapp-file" accept=".webp" onchange="handleWhatsAppImport(event)">
-                <span style="font-size: 14px; color: var(--text-gray); font-weight: 600;"><i class="fa-solid fa-file-arrow-up"></i> Cargar formato .webp</span>
+                <span style="font-size: 12px; color: var(--text-gray); font-weight: 600;"><i class="fa-solid fa-file-import"></i> Seleccionar archivo .webp</span>
             </div>
-            <button onclick="showPage('feed-page')" class="btn btn-alt" style="justify-content: center;">Regresar al Feed</button>
+            
+            <button onclick="showPage('feed-page')" class="btn btn-alt" style="justify-content: center; padding: 10px;">Volver</button>
         </div>
     </section>
 </main>
@@ -498,7 +569,7 @@
             signOut 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // CREDENCIALES CONFIGURADAS DE FIREBASE
+        // SERVIDORES DE FIREBASE 
         const firebaseConfig = {
             apiKey: "AIzaSyBkxCW28OYepzS0cFeJMVsuEiCabncsvVw",
             authDomain: "robert-dd6bd.firebaseapp.com",
@@ -510,30 +581,29 @@
             measurementId: "G-N5WW7VK051"
         };
 
-        // CREDENCIALES CONFIGURADAS DE CLOUDINARY
+        // INTEGRACIÓN DE CLOUDINARY
         const CLOUDINARY_CONFIG = { 
             cloudName: "ecgbufts", 
             uploadPreset: "Robert" 
         };
 
-        // Inicialización de Servicios
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
         let currentAuthMode = 'login'; 
         let currentUser = null;
 
-        // Base de Datos Local
-        let stickersDB = JSON.parse(localStorage.getItem('stickers_premium_toast_db')) || [
-            { id: 1, name: 'Estilo Dios ⚡', url: 'https://res.cloudinary.com/demo/image/upload/w_400,h_400,c_fill/sample.jpg', type: 'image' },
-            { id: 2, name: 'Animación Épica 🔥', url: 'https://res.cloudinary.com/demo/video/upload/w_400,h_400,c_fill,du_5/dog.mp4', type: 'video' }
+        // Base de Datos Compacta Localizada
+        let stickersDB = JSON.parse(localStorage.getItem('stickers_app_compact_db')) || [
+            { id: 1, name: 'Bienvenido Rey ⚡', url: 'https://res.cloudinary.com/demo/image/upload/w_300,h_300,c_fill/sample.jpg', type: 'image', text: '' },
+            { id: 2, name: 'Mood Dios 🔥', url: 'https://res.cloudinary.com/demo/video/upload/w_300,h_300,c_fill,du_5/dog.mp4', type: 'video', text: '¡VAMOS!' }
         ];
 
-        if(!localStorage.getItem('stickers_premium_toast_db')) {
-            localStorage.setItem('stickers_premium_toast_db', JSON.stringify(stickersDB));
+        if(!localStorage.getItem('stickers_app_compact_db')) {
+            localStorage.setItem('stickers_app_compact_db', JSON.stringify(stickersDB));
         }
 
-        // --- SISTEMA DE ALERTAS TOAST PROFESIONALES ---
+        // --- ENRUTADOR NOTIFICACIONES TOAST ---
         window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -543,26 +613,32 @@
             if(type === 'error') icon = '<i class="fa-solid fa-circle-xmark"></i>';
             if(type === 'info') icon = '<i class="fa-solid fa-circle-info"></i>';
 
-            toast.innerHTML = `
-                <div class="toast-icon">${icon}</div>
-                <div>${message}</div>
-            `;
-            
+            toast.innerHTML = `<div class="toast-icon">${icon}</div><div>${message}</div>`;
             container.appendChild(toast);
             
-            setTimeout(() => toast.classList.add('show'), 50);
-
+            setTimeout(() => toast.classList.add('show'), 30);
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400);
-            }, 3500);
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
-        // --- CONTROLADOR DE VISTAS ---
+        // --- AJUSTES Y MODIFICADORES DEL CANVAS DE CREACIÓN ---
+        window.updateStickerText = function(val) {
+            document.getElementById('sticker-text-render').innerText = val.toUpperCase();
+        }
+
+        window.updateStickerSize = function(val) {
+            document.getElementById('size-val').innerText = val + '%';
+            const media = document.querySelector('#media-preview img, #media-preview video');
+            if(media) {
+                media.style.transform = `scale(${val / 100})`;
+            }
+        }
+
+        // --- CONTROLADOR DE FLUJO ---
         window.showPage = function(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             
             if (!currentUser && pageId !== 'auth-page') {
                 document.getElementById('auth-page').classList.add('active');
@@ -570,16 +646,10 @@
             }
             
             const targetPage = document.getElementById(pageId);
-            if(targetPage) {
-                targetPage.classList.add('active');
-            }
-
-            if(pageId === 'feed-page') {
-                renderStickers();
-            }
+            if(targetPage) targetPage.classList.add('active');
+            if(pageId === 'feed-page') renderStickers();
         }
 
-        // --- CONTROLADOR DE SELECTOR INTERNO ---
         window.toggleAuthMode = function(mode) {
             currentAuthMode = mode;
             const tabLogin = document.getElementById('tab-login');
@@ -599,27 +669,26 @@
 
             if (mode === 'login') {
                 tabLogin.classList.add('active');
-                authBtn.innerText = "Entrar al Estudio";
+                authBtn.innerText = "Acceder";
             } else if (mode === 'register') {
                 tabRegister.classList.add('active');
-                authBtn.innerText = "Registrar Cuenta Premium";
+                authBtn.innerText = "Registrar Cuenta";
             } else if (mode === 'forgot') {
                 authTabs.classList.add('hidden');
                 passwordGroup.classList.add('hidden');
                 forgetLink.classList.add('hidden');
                 backLogin.classList.remove('hidden');
-                authBtn.innerText = "Recuperar Acceso";
+                authBtn.innerText = "Recuperar Contraseña";
             }
         }
 
-        // --- OBSERVAR ESTADO DE SESIÓN ---
+        // --- CONTROL DE AUTENTICACIÓN FIREBASE ---
         onAuthStateChanged(auth, (user) => {
             const userNav = document.getElementById('user-nav');
             if (user) {
                 currentUser = user;
                 userNav.classList.remove('hidden');
                 showPage('feed-page');
-                showToast(`¡Conexión exitosa! Bienvenido de nuevo.`, 'success');
             } else {
                 currentUser = null;
                 userNav.classList.add('hidden');
@@ -627,7 +696,6 @@
             }
         });
 
-        // --- MANEJADOR DE ENVÍO AUTENTICACIÓN ---
         window.handleAuth = async function(e) {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -635,66 +703,66 @@
             const authBtn = document.getElementById('auth-btn');
 
             authBtn.disabled = true;
-            authBtn.innerText = "Estableciendo conexión segura...";
+            authBtn.innerText = "Conectando...";
 
             try {
                 if (currentAuthMode === 'login') {
                     await signInWithEmailAndPassword(auth, email, password);
                 } else if (currentAuthMode === 'register') {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    showToast("Cuenta registrada a nivel Dios.", "success");
+                    showToast("Cuenta premium creada con éxito.", "success");
                 } else if (currentAuthMode === 'forgot') {
                     await sendPasswordResetEmail(auth, email);
-                    showToast("Enlace de recuperación enviado al correo electrónico.", "info");
+                    showToast("Correo enviado.", "info");
                     toggleAuthMode('login');
                 }
             } catch (error) {
-                console.error(error);
-                showToast("Acceso denegado: Datos o credenciales inválidos.", "error");
+                showToast("Fallo de acceso: Credenciales incorrectas.", "error");
             } finally {
                 authBtn.disabled = false;
-                if(currentAuthMode === 'login') authBtn.innerText = "Entrar al Estudio";
-                if(currentAuthMode === 'register') authBtn.innerText = "Registrar Cuenta Premium";
-                if(currentAuthMode === 'forgot') authBtn.innerText = "Recuperar Acceso";
+                if(currentAuthMode === 'login') authBtn.innerText = "Acceder";
+                if(currentAuthMode === 'register') authBtn.innerText = "Registrar Cuenta";
             }
         }
 
-        // --- CIERRE DE SESIÓN ---
         window.logout = function() {
             signOut(auth);
-            showToast("Sesión finalizada correctamente.", "info");
+            showToast("Sesión cerrada.", "info");
         }
 
-        // --- PINTAR TARJETAS EN GALERÍA ---
+        // --- CONSTRUCTOR DE LA VISTA DE LISTA COMPACTA VERTICAL ---
         window.renderStickers = function() {
             const grid = document.getElementById('stickers-grid');
             grid.innerHTML = '';
 
             stickersDB.forEach(sticker => {
-                const item = document.createElement('div');
-                item.className = "sticker-item";
+                const row = document.createElement('div');
+                row.className = "sticker-row";
                 
-                let mediaTag = '';
+                let previewTag = '';
                 if(sticker.type === 'video') {
-                    mediaTag = `<video src="${sticker.url}" autoplay loop muted playsinline></video>`;
+                    previewTag = `<video src="${sticker.url}" autoplay loop muted playsinline></video>`;
                 } else {
-                    mediaTag = `<img src="${sticker.url}" alt="${sticker.name}">`;
+                    previewTag = `<img src="${sticker.url}" alt="">`;
                 }
 
-                item.innerHTML = `
-                    <div class="viewer-box">
-                        ${mediaTag}
+                row.innerHTML = `
+                    <div class="sticker-preview-mini">
+                        ${previewTag}
                     </div>
-                    <p class="meta-title">${sticker.name}</p>
-                    <button onclick="sendToWhatsApp('${sticker.url}')" class="btn" style="width:100%; padding: 10px 12px; font-size:12px;">
-                        <i class="fa-brands fa-whatsapp"></i> Guardar en WA
+                    <div class="sticker-info-mini">
+                        <h4>${sticker.name}</h4>
+                        <span>${sticker.type === 'video' ? 'Animado' : 'Estático'} ${sticker.text ? '• Con texto' : ''}</span>
+                    </div>
+                    <button onclick="shareAsNativeSticker('${sticker.url}')" class="btn btn-mini">
+                        <i class="fa-solid fa-share-nodes"></i> Enviar
                     </button>
                 `;
-                grid.appendChild(item);
+                grid.appendChild(row);
             });
         }
 
-        // --- VALIDACIÓN DE ARCHIVO MULTIMEDIA CON FILTRO ---
+        // --- MOTOR DE PREVISUALIZACIÓN MULTIMEDIA INTELIGENTE ---
         window.previewFile = function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -702,21 +770,26 @@
             const previewContainer = document.getElementById('preview-container');
             const dropzonePrompt = document.getElementById('dropzone-prompt');
             const mediaPreview = document.getElementById('media-preview');
+            const durationRow = document.getElementById('duration-control-row');
             
             mediaPreview.innerHTML = '';
+            durationRow.classList.add('hidden');
 
             if (file.type.startsWith('video/')) {
+                durationRow.classList.remove('hidden');
                 const video = document.createElement('video');
                 video.src = URL.createObjectURL(file);
                 video.autoplay = true;
                 video.loop = true;
                 video.muted = true;
-                video.style.maxWidth = "100%";
-                video.style.maxHeight = "100%";
+                video.style.width = "100%";
+                video.style.height = "100%";
+                video.style.transition = "transform 0.1s ease";
                 
                 video.onloadedmetadata = function() {
-                    if (video.duration > 5.1) { 
-                        showToast("Límite excedido: El video del sticker animado supera los 5 segundos.", "error");
+                    const maxDurationSet = parseFloat(document.getElementById('sticker-duration-slider').value);
+                    if (video.duration > 5.1) {
+                        showToast("Aviso: El video excede el límite de 5 segundos.", "error");
                         resetPreview();
                     } else {
                         dropzonePrompt.classList.add('hidden');
@@ -727,8 +800,9 @@
             } else if (file.type.startsWith('image/')) {
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
-                img.style.maxWidth = "100%";
-                img.style.maxHeight = "100%";
+                img.style.width = "100%";
+                img.style.height = "100%";
+                img.style.transition = "transform 0.1s ease";
                 
                 dropzonePrompt.classList.add('hidden');
                 previewContainer.classList.remove('hidden');
@@ -736,27 +810,29 @@
             }
         }
 
-        // --- LIMPIAR ÁREA DE PREVIEW ---
         window.resetPreview = function(e) {
             if(e) e.preventDefault();
             document.getElementById('sticker-file').value = '';
+            document.getElementById('sticker-text-input').value = '';
+            document.getElementById('sticker-text-render').innerText = '';
             document.getElementById('dropzone-prompt').classList.remove('hidden');
             document.getElementById('preview-container').classList.add('hidden');
             document.getElementById('media-preview').innerHTML = '';
         }
 
-        // --- SUBIDA DIRECTA A CLOUDINARY EN PRODUCCIÓN ---
+        // --- CARGA Y CONFIGURACIÓN AUTOMÁTICA EN CLOUDINARY ---
         window.handleCreateSticker = async function(e) {
             e.preventDefault();
             const fileInput = document.getElementById('sticker-file');
             const nameInput = document.getElementById('sticker-name');
+            const textInput = document.getElementById('sticker-text-input');
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const file = fileInput.files[0];
 
             if(!file) return;
 
             submitBtn.disabled = true;
-            submitBtn.innerText = "Subiendo recurso multimedia...";
+            submitBtn.innerText = "Procesando...";
 
             const formData = new FormData();
             formData.append('file', file);
@@ -767,51 +843,56 @@
 
             try {
                 const response = await fetch(endpoint, { method: 'POST', body: formData });
-                if (!response.ok) throw new Error("Fallo en el servidor de carga");
-
                 const data = await response.json();
 
                 const newSticker = {
                     id: Date.now(),
                     name: nameInput.value,
                     url: data.secure_url,
-                    type: resourceType
+                    type: resourceType,
+                    text: textInput.value
                 };
 
                 stickersDB.unshift(newSticker);
-                localStorage.setItem('stickers_premium_toast_db', JSON.stringify(stickersDB));
+                localStorage.setItem('stickers_app_compact_db', JSON.stringify(stickersDB));
 
-                showToast("¡Sticker publicado con éxito!", "success");
-                
+                showToast("¡Sticker creado en tu lista!", "success");
                 nameInput.value = '';
                 resetPreview();
                 showPage('feed-page');
-
             } catch (error) {
-                console.error(error);
-                showToast("Error de red: Comprueba las directivas no firmadas de tu preset.", "error");
+                showToast("Error de conexión remota.", "error");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Subir e Inyectar a la Galería";
+                submitBtn.innerText = "Generar y Guardar";
             }
         }
 
-        // --- ENVIAR ENLACE DE EXPORTACIÓN ---
-        window.sendToWhatsApp = function(mediaUrl) {
-            const copyText = `¡Mira este sticker premium listo para añadir! Descárgalo desde aquí: ${mediaUrl}`;
-            const link = `https://api.whatsapp.com/send?text=${encodeURIComponent(copyText)}`;
-            window.open(link, '_blank');
+        // --- SISTEMA INTERNO: SIMULADOR DE EMISIÓN DE STICKER DIRECTO ---
+        window.shareAsNativeSticker = function(mediaUrl) {
+            showToast("Preparando sticker empaquetado...", "info");
+            
+            // Pasarela API Nativa para aplicaciones / Web Share API si es contenedor compatible
+            if (navigator.share) {
+                navigator.share({
+                    title: 'StickerVerse Export',
+                    text: 'Añade este sticker directamente a tus favoritos de WhatsApp.',
+                    url: mediaUrl
+                }).then(() => {
+                    showToast("¡Sticker compartido correctamente!", "success");
+                }).catch(() => {
+                    // Fallback directo a Intent
+                    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(mediaUrl)}`, '_blank');
+                });
+            } else {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(mediaUrl)}`, '_blank');
+            }
         }
 
-        // --- CONVERTIDOR DE ARCHIVOS DESDE WHATSAPP (.WEBP) ---
+        // --- IMPORTAR DIRECTO .WEBP DESDE WHATSAPP ---
         window.handleWhatsAppImport = async function(e) {
             const file = e.target.files[0];
             if(!file) return;
-
-            if(!file.name.endsWith('.webp')) {
-                showToast("Extensión no soportada. Solo se admiten archivos nativos .webp", "error");
-                return;
-            }
 
             const formData = new FormData();
             formData.append('file', file);
@@ -820,25 +901,26 @@
             const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`;
 
             try {
-                showToast("Mudando sticker de WhatsApp a la nube...", "info");
+                showToast("Importando archivo binario...", "info");
                 const response = await fetch(endpoint, { method: 'POST', body: formData });
                 const data = await response.json();
 
                 const newSticker = {
                     id: Date.now(),
-                    name: file.name.replace('.webp', '') || "Mundano de WA",
+                    name: file.name.replace('.webp', '') || "Importado WA",
                     url: data.secure_url,
-                    type: 'image'
+                    type: 'image',
+                    text: ''
                 };
 
                 stickersDB.unshift(newSticker);
-                localStorage.setItem('stickers_premium_toast_db', JSON.stringify(stickersDB));
+                localStorage.setItem('stickers_app_compact_db', JSON.stringify(stickersDB));
 
-                showToast("¡Sincronización de sticker finalizada!", "success");
+                showToast("Sincronizado en la lista.", "success");
                 document.getElementById('whatsapp-file').value = '';
                 showPage('feed-page');
             } catch (error) {
-                showToast("Error de transmisión al procesar el archivo .webp", "error");
+                showToast("Error al decodificar el sticker.", "error");
             }
         }
     </script>
