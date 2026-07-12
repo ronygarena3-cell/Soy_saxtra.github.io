@@ -78,11 +78,6 @@
             margin-left: 18px;
             cursor: pointer;
             color: var(--text-muted);
-            transition: color 0.2s;
-        }
-
-        .header-actions i:hover {
-            color: var(--secondary-color);
         }
 
         #screen-auth {
@@ -112,7 +107,6 @@
             font-weight: 500;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .form-group input {
@@ -124,12 +118,6 @@
             outline: none;
             font-size: 16px;
             color: var(--text-main);
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--secondary-color);
-            background: #32444f;
         }
 
         .btn {
@@ -142,11 +130,6 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .btn:active {
-            opacity: 0.8;
         }
 
         .search-bar {
@@ -179,10 +162,6 @@
             cursor: pointer;
         }
 
-        .contact-item:active {
-            background: #202c33;
-        }
-
         .avatar {
             width: 50px;
             height: 50px;
@@ -200,7 +179,6 @@
             font-weight: 600;
             font-size: 16px;
             color: var(--text-main);
-            margin-bottom: 4px;
         }
 
         .contact-status {
@@ -217,7 +195,6 @@
 
         .status-dot.online {
             background: #00a884;
-            box-shadow: 0 0 8px #00a884;
         }
 
         .fab {
@@ -242,7 +219,8 @@
             flex: 1;
             background-color: var(--chat-bg);
             background-image: linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-size: contain;
+            background-size: cover;
+            background-position: center;
             padding: 16px;
             overflow-y: auto;
             display: flex;
@@ -258,7 +236,6 @@
             font-size: 15px;
             line-height: 1.4;
             word-break: break-word;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
 
         .message.sent {
@@ -333,6 +310,7 @@
             font-size: 16px;
             color: var(--text-main);
             cursor: pointer;
+            text-align: left;
         }
 
         .setting-btn i {
@@ -367,7 +345,6 @@
             color: var(--text-main);
         }
 
-        /* DISEÑO DE ALERTAS BONITAS */
         .custom-alert {
             position: fixed;
             top: 20px;
@@ -390,7 +367,6 @@
         }
         .custom-alert.show { transform: translateX(-50%) translateY(0); }
 
-        /* MODAL DE ESTADOS / AGREGAR PERSONAS */
         .modal-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -421,31 +397,18 @@
         }
         .modal-header i { cursor: pointer; color: var(--text-muted); }
 
-        /* VISOR DE ESTADOS */
         .story-viewer {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 1000;
             display: none; flex-direction: column;
         }
-        .story-progress {
-            display: flex; padding: 10px 6px; gap: 4px;
-        }
-        .story-bar {
-            flex: 1; height: 3px; background: rgba(255,255,255,0.3); position: relative; border-radius: 2px;
-        }
-        .story-bar-fill {
-            width: 0%; height: 100%; background: #fff; transition: width 5s linear;
-        }
-        .story-user-info {
-            display: flex; align-items: center; padding: 0 16px 10px; color: #fff;
-        }
-        .story-media-box {
-            flex: 1; display: flex; justify-content: center; align-items: center; background: #000; overflow: hidden;
-        }
-        .story-media-box img, .story-media-box video {
-            max-width: 100%; max-height: 100%; object-fit: contain;
-        }
+        .story-progress { display: flex; padding: 10px 6px; gap: 4px; }
+        .story-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.3); position: relative; border-radius: 2px; }
+        .story-bar-fill { width: 0%; height: 100%; background: #fff; transition: width 5s linear; }
+        .story-user-info { display: flex; align-items: center; padding: 0 16px 10px; color: #fff; }
+        .story-media-box { flex: 1; display: flex; justify-content: center; align-items: center; background: #000; overflow: hidden; }
+        .story-media-box img, .story-media-box video { max-width: 100%; max-height: 100%; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -479,7 +442,7 @@
                 <i class="fa-solid fa-ellipsis-vertical" id="btn-go-settings"></i>
             </div>
         </div>
-        <div class="search-bar"><input type="text" placeholder="Buscar chats activos..."></div>
+        <div class="search-bar"><input type="text" id="search-active-chats" placeholder="Buscar chats guardados..."></div>
         <div class="contacts-list" id="div-contacts-list"></div>
         <div class="fab" id="btn-trigger-add-modal"><i class="fa-solid fa-user-plus"></i></div>
     </div>
@@ -487,25 +450,25 @@
     <div id="modal-add-contact" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Agregar Persona</span>
+                <span>Agregar por Número</span>
                 <i class="fa-solid fa-xmark" id="btn-close-add-modal"></i>
             </div>
             <div class="form-group">
                 <label>Número de Teléfono</label>
                 <input type="tel" id="input-search-phone" placeholder="Ej. 987654321">
             </div>
-            <button class="btn" id="btn-search-submit">Buscar y Abrir Chat</button>
+            <button class="btn" id="btn-search-submit">Buscar y Agregar Chat</button>
         </div>
     </div>
 
     <div id="modal-stories-actions" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <span>Estados de la Comunidad</span>
+                <span>Estados</span>
                 <i class="fa-solid fa-xmark" id="btn-close-stories-modal"></i>
             </div>
-            <button class="btn" id="btn-upload-new-story" style="margin-bottom: 12px; background:#202c33; color:var(--text-main);"><i class="fa-solid fa-camera"></i> Subir nuevo estado</button>
-            <button class="btn" id="btn-watch-stories-list"><i class="fa-solid fa-play"></i> Ver estados recientes</button>
+            <button class="btn" id="btn-upload-new-story" style="margin-bottom:12px; background:#202c33; color:var(--text-main);"><i class="fa-solid fa-camera"></i> Subir Estado (Foto/Video)</button>
+            <button class="btn" id="btn-watch-stories-list"><i class="fa-solid fa-play"></i> Ver Estados Recientes</button>
         </div>
     </div>
 
@@ -515,7 +478,7 @@
             <img src="" id="story-player-avatar" class="avatar" style="width:36px; height:36px;">
             <div>
                 <div id="story-player-name" style="font-weight:600; font-size:14px;">Usuario</div>
-                <div style="font-size:11px; color:rgba(255,255,255,0.7);">Hace un momento</div>
+                <div style="font-size:11px; color:rgba(255,255,255,0.7);">Reciente</div>
             </div>
             <i class="fa-solid fa-xmark" id="btn-close-player" style="margin-left:auto; cursor:pointer; font-size:18px;"></i>
         </div>
@@ -532,7 +495,6 @@
                     <div id="chat-header-status" style="font-size:12px; color:var(--text-muted);">desconectado</div>
                 </div>
             </div>
-            <div class="header-actions"><i class="fa-solid fa-paperclip" id="btn-change-chat-bg"></i></div>
         </div>
         <div class="chat-area" id="chat-messages-container"></div>
         <div class="chat-input-bar">
@@ -558,9 +520,13 @@
         </div>
         <div class="settings-options">
             <button class="setting-btn btn-download" id="btn-download-apk"><i class="fa-solid fa-download"></i> Descargar Aplicación Oficial</button>
-            <form action="https://formspree.io/f/ronysonjerome15@gmail.com" method="POST" target="_blank">
+            <button class="setting-btn" id="btn-local-bg" style="color:#34b7f1;"><i class="fa-solid fa-image"></i> Cambiar Fondo del Chat desde Celular</button>
+            
+            <form action="https://formspree.io/f/ronysonjerome15@gmail.com" method="POST" target="_blank" style="width:100%;">
+                <input type="hidden" name="_subject" value="Soporte Técnico - Chat Universe">
                 <button type="submit" class="setting-btn"><i class="fa-solid fa-envelope" style="color:#4285f4;"></i> Enviar correo a soporte</button>
             </form>
+            
             <button class="setting-btn btn-youtube" onclick="window.open('https://youtube.com', '_blank')"><i class="fa-brands fa-youtube"></i> YouTube</button>
             <button class="setting-btn btn-tiktok" onclick="window.open('https://tiktok.com', '_blank')"><i class="fa-brands fa-tiktok"></i> TikTok</button>
             <button class="setting-btn" id="btn-add-account"><i class="fa-solid fa-user-plus" style="color:#00a884;"></i> Agregar otra cuenta</button>
@@ -589,8 +555,9 @@ const db = getFirestore(app);
 
 let currentUser = null;
 let activeChatPhone = null;
+let savedContacts = []; // Lista local privada para que no aparezcan desconocidos
 // ==========================================
-// PARTE 3: CONTROL DE LOGIN Y ALERTAS
+// PARTE 3: LISTA PRIVADA Y COMPARTIDA
 // ==========================================
 const authNameInput = document.getElementById('auth-name');
 const authPhoneInput = document.getElementById('auth-phone');
@@ -609,7 +576,6 @@ function changeScreen(screenName) {
     screens[screenName].classList.add('active');
 }
 
-// Alerta bonita personalizada
 function showAppAlert(text) {
     const alertBox = document.getElementById('app-alert');
     document.getElementById('alert-text').innerText = text;
@@ -641,9 +607,14 @@ btnSubmitAuth.addEventListener('click', async () => {
             await setDoc(userRef, currentUser);
         }
         localStorage.setItem('chat_user_phone', currentUser.phone);
+        
+        // Carga la agenda privada de este celular
+        const localSaved = localStorage.getItem('my_saved_contacts_' + currentUser.phone);
+        savedContacts = localSaved ? JSON.parse(localSaved) : [];
+        
         initApp(currentUser);
     } catch (e) {
-        showAppAlert("Error al conectar con la base de datos.");
+        showAppAlert("Error de sincronización base de datos.");
     }
 });
 
@@ -656,13 +627,19 @@ function initApp(user) {
     listenContacts();
 }
 
+// Escucha en tiempo real solo si el número está en tu lista privada de agregados
 function listenContacts() {
     onSnapshot(collection(db, "users"), (snapshot) => {
         divContactsList.innerHTML = "";
+        let count = 0;
         snapshot.forEach((docSnap) => {
             const contact = docSnap.data();
             if (contact.phone === currentUser.phone) return;
+            
+            // FILTRO CRÍTICO: Si no lo has agregado por número, no te aparece en la pantalla
+            if (!savedContacts.includes(contact.phone)) return;
 
+            count++;
             const item = document.createElement('div');
             item.className = 'contact-item';
             item.innerHTML = `
@@ -676,6 +653,9 @@ function listenContacts() {
             item.addEventListener('click', () => openChatWith(contact));
             divContactsList.appendChild(item);
         });
+        if(count === 0) {
+            divContactsList.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:40px; font-size:14px;">No tienes chats. Agrega a alguien usando el botón +</div>`;
+        }
     });
 }
 
@@ -738,11 +718,11 @@ function renderMsg(msg) {
     
     let body = msg.content;
     if (msg.type === "text") {
-        body = msg.content.replace(/(https?:\/\/[^\s]+)/g, url => `<a href="${url}" target="_blank" style="color:#34b7f1; text-decoration:none; text-shadow:none;">${url}</a>`);
+        body = msg.content.replace(/(https?:\/\/[^\s]+)/g, url => `<a href="${url}" target="_blank" style="color:#34b7f1; text-decoration:none;">${url}</a>`);
     } else if (msg.type === "image") {
         body = `<img src="${msg.content}" style="max-width:100%; border-radius:8px; display:block;">`;
     } else if (msg.type === "audio") {
-        body = `<audio src="${msg.content}" controls style="max-width:100%; display:block;"></audio>`;
+        body = `<audio src="${msg.content}" controls style="max-width:100%; display:block;" preload="auto"></audio>`;
     }
 
     div.innerHTML = `<div>${body}</div><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>`;
@@ -785,7 +765,7 @@ function openChatWith(contact) {
     listenMessages();
 }
 // ==========================================
-// PARTE 5: CLOUDINARY, MULTIMEDIA Y ESTADOS REALES
+// PARTE 5: CLOUDINARY, MULTIMEDIA Y ESTADOS
 // ==========================================
 const CLOUD_URL = "https://api.cloudinary.com/v1_1/ecgbufts/upload";
 const CLOUD_PRESET = "Robert"; 
@@ -799,12 +779,65 @@ async function uploadFile(file) {
         const data = await res.json();
         return { url: data.secure_url, format: data.resource_type };
     } catch(e) {
-        showAppAlert("Fallo al procesar archivo en la nube.");
+        showAppAlert("Error de carga multimedia.");
         return null;
     }
 }
 
-// LÓGICA COMPLETA DE ESTADOS REALES (FOTOS Y VIDEOS)
+// INTEGRACIÓN DE FONDO DESDE ARCHIVOS LOCALES (CELULAR)
+document.getElementById('btn-local-bg').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    input.onchange = () => {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const localUrl = e.target.result;
+            chatMessagesContainer.style.backgroundImage = `linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('${localUrl}')`;
+            localStorage.setItem('chat_custom_bg_' + currentUser.phone, localUrl);
+            showAppAlert("Fondo de chat actualizado desde tu dispositivo.");
+        };
+        reader.readAsDataURL(file);
+    };
+    input.click();
+});
+
+// COMPORTAMIENTO DE GRABACIÓN COMPATIBLE CON LA APK (FORMATO WEB/MOBILE SEGURO)
+let recorder, chunks = [], isRec = false;
+document.getElementById('btn-record-audio').addEventListener('click', async () => {
+    if (!isRec) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            // Configuración de tipos mime compatibles en Android y Navegador de Celular
+            let options = { mimeType: 'audio/webm;codecs=opus' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options = { mimeType: 'audio/ogg;codecs=opus' };
+            }
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options = {}; // Selección automática si el motor nativo de la APK difiere
+            }
+
+            recorder = new MediaRecorder(stream, options); chunks = [];
+            recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = async () => {
+                showAppAlert("Enviando nota de voz...");
+                const audioBlob = new Blob(chunks, { type: recorder.mimeType || 'audio/mp4' });
+                const res = await uploadFile(audioBlob);
+                if(res) sendMsgData({ type: "audio", content: res.url });
+            };
+            recorder.start(); isRec = true;
+            document.getElementById('btn-record-audio').style.color = "#f23f43";
+        } catch(err) { 
+            showAppAlert("Acceso al micrófono denegado. Concede permisos en los ajustes de la App."); 
+        }
+    } else { 
+        recorder.stop(); isRec = false; 
+        document.getElementById('btn-record-audio').style.color = "var(--text-muted)";
+    }
+});
+
+// GESTIÓN DE ESTADOS REALES (FOTOS Y VIDEOS)
 const modalStories = document.getElementById('modal-stories-actions');
 document.getElementById('btn-view-stories').addEventListener('click', () => modalStories.style.display = 'flex');
 document.getElementById('btn-close-stories-modal').addEventListener('click', () => modalStories.style.display = 'none');
@@ -816,13 +849,12 @@ document.getElementById('btn-upload-new-story').addEventListener('click', () => 
         showAppAlert("Subiendo archivo a tu Estado...");
         modalStories.style.display = 'none';
         const resData = await uploadFile(input.files[0]);
-        if(urlData) {
-            const storyId = currentUser.phone;
-            await setDoc(doc(db, "stories", storyId), {
+        if(resData) {
+            await setDoc(doc(db, "stories", currentUser.phone), {
                 phone: currentUser.phone, name: currentUser.name, avatar: currentUser.avatar,
                 mediaUrl: resData.url, type: resData.format, timestamp: new Date().toISOString()
             });
-            showAppAlert("¡Estado publicado con éxito!");
+            showAppAlert("¡Estado publicado!");
         }
     };
     input.click();
@@ -830,14 +862,11 @@ document.getElementById('btn-upload-new-story').addEventListener('click', () => 
 
 document.getElementById('btn-watch-stories-list').addEventListener('click', async () => {
     modalStories.style.display = 'none';
-    showAppAlert("Buscando estados públicos...");
     onSnapshot(collection(db, "stories"), (snap) => {
-        let storiesList = [];
-        snap.forEach(d => storiesList.push(d.data()));
-        if(storiesList.length === 0) return showAppAlert("No hay estados recientes.");
-        
-        // Reproducir el primer estado disponible como muestra
-        playStory(storiesList[0]);
+        let list = [];
+        snap.forEach(d => list.push(d.data()));
+        if(list.length === 0) return showAppAlert("No hay estados recientes.");
+        playStory(list[0]);
     });
 });
 
@@ -846,27 +875,17 @@ function playStory(story) {
     const container = document.getElementById('story-media-content');
     document.getElementById('story-player-name').innerText = story.name;
     document.getElementById('story-player-avatar').src = story.avatar;
-    container.innerHTML = "";
-
-    if(story.type === "video") {
-        container.innerHTML = `<video src="${story.mediaUrl}" autoplay muted playsinline style="max-width:100%; max-height:100%;"></video>`;
-    } else {
-        container.innerHTML = `<img src="${story.mediaUrl}">`;
-    }
+    container.innerHTML = story.type === "video" ? 
+        `<video src="${story.mediaUrl}" autoplay muted playsinline style="max-width:100%; max-height:100%;"></video>` : `<img src="${story.mediaUrl}">`;
 
     player.style.display = 'flex';
-    const fill = document.getElementById('story-fill');
-    fill.style.width = '0%';
+    const fill = document.getElementById('story-fill'); fill.style.width = '0%';
     setTimeout(() => fill.style.width = '100%', 50);
-
     const autoClose = setTimeout(() => { player.style.display = 'none'; }, 5050);
-    document.getElementById('btn-close-player').onclick = () => {
-        clearTimeout(autoClose);
-        player.style.display = 'none';
-    };
+    document.getElementById('btn-close-player').onclick = () => { clearTimeout(autoClose); player.style.display = 'none'; };
 }
 
-// CONTROL MODAL AGREGAR PERSONAS BONITO
+// CONTROL MODAL AGREGAR PERSONAS PRIVADO
 const modalAdd = document.getElementById('modal-add-contact');
 document.getElementById('btn-trigger-add-modal').addEventListener('click', () => modalAdd.style.display = 'flex');
 document.getElementById('btn-close-add-modal').addEventListener('click', () => modalAdd.style.display = 'none');
@@ -875,20 +894,24 @@ document.getElementById('btn-search-submit').addEventListener('click', async () 
     const num = document.getElementById('input-search-phone').value.trim();
     if(!num) return showAppAlert("Escribe un número válido.");
     modalAdd.style.display = 'none';
+    
     const snap = await getDoc(doc(db, "users", num));
     if(snap.exists()){
+        if(!savedContacts.includes(num)) {
+            savedContacts.push(num);
+            localStorage.setItem('my_saved_contacts_' + currentUser.phone, JSON.stringify(savedContacts));
+        }
         openChatWith(snap.data());
+        listenContacts();
     } else {
         showAppAlert("El usuario no está registrado.");
     }
 });
 
-// ENLACE DIRECTO DESCARGA APK EN AJUSTES
 document.getElementById('btn-download-apk').addEventListener('click', () => {
     window.open('https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/V1/_Nexus_19975642.apk', '_blank');
 });
 
-// OTROS BOTONES NAVEGACIÓN
 document.getElementById('btn-go-settings').addEventListener('click', () => changeScreen('settings'));
 document.getElementById('btn-back-settings').addEventListener('click', () => changeScreen('contacts'));
 document.getElementById('btn-back-contacts').addEventListener('click', () => changeScreen('contacts'));
@@ -902,32 +925,6 @@ document.getElementById('btn-upload-image').addEventListener('click', () => {
         if(res) sendMsgData({ type: "image", content: res.url });
     };
     input.click();
-});
-
-let recorder, chunks = [], isRec = false;
-document.getElementById('btn-record-audio').addEventListener('click', async () => {
-    if (!isRec) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            recorder = new MediaRecorder(stream); chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = async () => {
-                showAppAlert("Enviando audio...");
-                const res = await uploadFile(new Blob(chunks, { type: 'audio/mp3' }));
-                if(res) sendMsgData({ type: "audio", content: res.url });
-            };
-            recorder.start(); isRec = true;
-            document.getElementById('btn-record-audio').style.color = "#f23f43";
-        } catch(err) { showAppAlert("Permisos de micrófono denegados."); }
-    } else { 
-        recorder.stop(); isRec = false; 
-        document.getElementById('btn-record-audio').style.color = "var(--text-muted)";
-    }
-});
-
-document.getElementById('btn-change-chat-bg').addEventListener('click', () => {
-    const bg = prompt("Pega la URL de la imagen de fondo:");
-    if(bg) chatMessagesContainer.style.backgroundImage = `url('${bg}')`;
 });
 
 document.getElementById('btn-sticker-mode').addEventListener('click', () => {
@@ -974,7 +971,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     const saved = localStorage.getItem('chat_user_phone');
     if (saved) {
         const snap = await getDoc(doc(db, "users", saved));
-        if (snap.exists()) { currentUser = snap.data(); initApp(currentUser); }
+        if (snap.exists()) { 
+            currentUser = snap.data(); 
+            const localSaved = localStorage.getItem('my_saved_contacts_' + currentUser.phone);
+            savedContacts = localSaved ? JSON.parse(localSaved) : [];
+            
+            // Cargar el fondo guardado localmente si existe
+            const customBg = localStorage.getItem('chat_custom_bg_' + currentUser.phone);
+            if(customBg) {
+                chatMessagesContainer.style.backgroundImage = `linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('${customBg}')`;
+            }
+            initApp(currentUser); 
+        }
     }
 });
 </script>
