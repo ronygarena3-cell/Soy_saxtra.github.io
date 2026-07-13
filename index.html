@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Universe App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Chat Universe Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #0b141a;
             --secondary-color: #00a884;
             --bg-color: #0b141a;
-            --chat-bg: #0b141a;
             --chat-left: #202c33;
             --chat-right: #005c4b;
             --text-main: #e9edef;
@@ -23,44 +22,40 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #111b21;
+            background-color: #000;
             height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: var(--text-main);
+            overflow: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 450px;
-            height: 100vh;
-            background: #111b21;
+            height: 100%;
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            background: #111b21;
         }
 
         .screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: #111b21;
             display: none;
             flex-direction: column;
             z-index: 10;
         }
 
-        .screen.active {
-            display: flex;
-        }
+        .screen.active { display: flex; }
 
         .header {
             background-color: #202c33;
@@ -72,6 +67,7 @@
             font-size: 18px;
             font-weight: 600;
             border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
         }
 
         .header-actions i {
@@ -83,38 +79,32 @@
         #screen-auth {
             justify-content: center;
             align-items: center;
-            padding: 24px;
-            background: linear-gradient(135deg, #0b141a 0%, #111b21 100%);
+            padding: 20px;
         }
 
         .auth-box {
             background: #222e35;
-            padding: 30px;
+            padding: 24px;
             border-radius: 16px;
             width: 100%;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            font-weight: 500;
+            margin-bottom: 6px;
+            font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .form-group input {
             width: 100%;
-            padding: 14px;
+            padding: 12px 14px;
             background: #2a3942;
             border: 1px solid transparent;
-            border-radius: 10px;
+            border-radius: 8px;
             outline: none;
             font-size: 16px;
             color: var(--text-main);
@@ -126,32 +116,22 @@
             background-color: var(--secondary-color);
             color: #111b21;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .search-bar {
-            padding: 10px 14px;
-            background: #111b21;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px 16px;
-            background: #202c33;
-            border: none;
-            border-radius: 10px;
-            outline: none;
-            color: var(--text-main);
-            font-size: 15px;
+        .contacts-layout {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .contacts-list {
             flex: 1;
             overflow-y: auto;
-            background: #111b21;
         }
 
         .contact-item {
@@ -163,373 +143,303 @@
         }
 
         .avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             margin-right: 14px;
             object-fit: cover;
             background: #2a3942;
         }
 
-        .contact-info {
-            flex: 1;
-        }
+        .contact-info { flex: 1; }
+        .contact-name { font-weight: 600; font-size: 16px; }
+        .contact-status { font-size: 13px; color: var(--text-muted); }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #3a4b53; }
+        .status-dot.online { background: #00a884; }
 
-        .contact-name {
-            font-weight: 600;
-            font-size: 16px;
-            color: var(--text-main);
-        }
-
-        .contact-status {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #3a4b53;
-        }
-
-        .status-dot.online {
-            background: #00a884;
-        }
-
-        .fab {
-            position: absolute;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            background-color: var(--secondary-color);
-            border-radius: 50%;
-            color: #111b21;
+        /* SECCIÓN INFERIOR DE ESTADOS WHATSAPP STYLE */
+        .bottom-stories-tray {
+            height: 85px;
+            background: #202c33;
+            border-top: 1px solid var(--border-color);
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 24px;
+            gap: 14px;
+            padding: 0 16px;
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .tray-story-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            z-index: 20;
+            min-width: 55px;
+        }
+
+        .tray-story-circle img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 2.5px solid var(--secondary-color);
+            object-fit: cover;
+        }
+
+        .tray-story-circle span {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            max-width: 55px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .chat-layout {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
         .chat-area {
             flex: 1;
-            background-color: var(--chat-bg);
-            background-image: linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-            background-size: cover;
-            background-position: center;
             padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* FONDO ANIMADO O ESTÁTICO TOTAL */
+        .chat-bg-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            pointer-events: none;
+            opacity: 0.15;
         }
 
         .message {
-            max-width: 80%;
-            padding: 9px 12px;
+            max-width: 75%;
+            padding: 8px 12px;
             border-radius: 12px;
             margin-bottom: 8px;
-            position: relative;
             font-size: 15px;
-            line-height: 1.4;
-            word-break: break-word;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
 
-        .message.sent {
-            background-color: var(--chat-right);
-            align-self: flex-end;
-            border-top-right-radius: 0;
-        }
-
-        .message.received {
-            background-color: var(--chat-left);
-            align-self: flex-start;
-            border-top-left-radius: 0;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: rgba(233,237,239,0.6);
-            text-align: right;
-            margin-top: 4px;
-            display: block;
-        }
+        .message.sent { background-color: var(--chat-right); align-self: flex-end; border-top-right-radius: 0; }
+        .message.received { background-color: var(--chat-left); align-self: flex-start; border-top-left-radius: 0; }
+        .message-time { font-size: 10px; color: rgba(233,237,239,0.5); text-align: right; margin-top: 3px; }
 
         .chat-input-bar {
             background: #202c33;
-            padding: 10px 14px;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 10;
         }
 
         .chat-input-bar input {
             flex: 1;
-            padding: 11px 16px;
+            padding: 10px 14px;
             background: #2a3942;
             border: none;
-            border-radius: 10px;
+            border-radius: 20px;
             outline: none;
             color: var(--text-main);
             font-size: 15px;
         }
 
-        .chat-input-bar i {
-            font-size: 22px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
+        .chat-input-bar i { font-size: 22px; color: var(--text-muted); cursor: pointer; }
 
-        .settings-profile {
-            text-align: center;
-            padding: 28px 20px;
-            background: #111b21;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .settings-profile img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--secondary-color);
-        }
-
-        .setting-btn {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 16px;
-            background: none;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 16px;
-            color: var(--text-main);
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .setting-btn i {
-            margin-right: 18px;
-            font-size: 20px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .btn-youtube { color: #ff0000; }
-        .btn-tiktok { color: #ffffff; }
-        .btn-logout { color: #f23f43; }
-        .btn-download { color: #00a884; font-weight: bold; }
-
-        .context-menu {
-            position: absolute;
-            background: #233138;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            border-radius: 8px;
+        /* PANEL EXCLUSIVO DE STICKERS COMPLETO */
+        .sticker-panel {
+            height: 280px;
+            background: #1f2c34;
+            border-top: 1px solid var(--border-color);
             display: none;
-            z-index: 100;
-            border: 1px solid var(--border-color);
+            flex-direction: column;
+            z-index: 12;
+            flex-shrink: 0;
         }
 
-        .context-menu button {
-            background: none;
-            border: none;
-            padding: 12px 24px;
-            cursor: pointer;
+        .sticker-panel-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sticker-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 12px;
+            overflow-y: auto;
+        }
+
+        .sticker-item img {
             width: 100%;
-            text-align: left;
-            color: var(--text-main);
+            height: 70px;
+            object-fit: contain;
+            cursor: pointer;
         }
 
         .custom-alert {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
+            top: 25px; left: 50%;
+            transform: translateX(-50%) translateY(-120px);
             background: #222e35;
             color: var(--text-main);
-            padding: 14px 24px;
+            padding: 14px 20px;
             border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.6);
             border-left: 5px solid var(--secondary-color);
-            z-index: 2000;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 90%;
-            max-width: 380px;
+            z-index: 3000;
+            transition: transform 0.4s ease;
+            font-size: 14px; display: flex; align-items: center; gap: 10px; width: 85%;
         }
         .custom-alert.show { transform: translateX(-50%) translateY(0); }
 
         .modal-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11,20,26,0.85);
-            z-index: 500;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            background: rgba(11,20,26,0.9); z-index: 800;
+            display: none; justify-content: center; align-items: center; padding: 20px;
         }
-        .modal-content {
-            background: #222e35;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid var(--border-color);
-        }
-        .modal-header {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--secondary-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-header i { cursor: pointer; color: var(--text-muted); }
+        .modal-content { background: #222e35; width: 100%; border-radius: 16px; padding: 20px; }
 
         .story-viewer {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 1000;
-            display: none; flex-direction: column;
+            background: #000; z-index: 2000; display: none; flex-direction: column;
         }
-        .story-progress { display: flex; padding: 10px 6px; gap: 4px; }
-        .story-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.3); position: relative; border-radius: 2px; }
-        .story-bar-fill { width: 0%; height: 100%; background: #fff; transition: width 5s linear; }
-        .story-user-info { display: flex; align-items: center; padding: 0 16px 10px; color: #fff; }
-        .story-media-box { flex: 1; display: flex; justify-content: center; align-items: center; background: #000; overflow: hidden; }
-        .story-media-box img, .story-media-box video { max-width: 100%; max-height: 100%; object-fit: contain; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div id="app-alert" class="custom-alert"><i class="fa-solid fa-circle-info"></i><span id="alert-text">Mensaje</span></div>
-
-    <div id="custom-context-menu" class="context-menu">
-        <button id="btn-delete-msg"><i class="fa-solid fa-trash" style="color:#f23f43; margin-right:10px;"></i> Eliminar mensaje</button>
-    </div>
+    <div id="app-alert" class="custom-alert"><i class="fa-solid fa-bell"></i><span id="alert-text">Notificación</span></div>
+    <div id="custom-context-menu" class="context-menu" style="position:absolute; display:none; background:#233138; z-index:5000; border-radius:8px; border:1px solid var(--border-color);"><button id="btn-delete-msg" style="background:none; border:none; padding:12px; color:#fff; cursor:pointer;">Eliminar mensaje</button></div>
 
     <div id="screen-auth" class="screen active">
         <div class="auth-box">
-            <h2 style="text-align:center; margin-bottom:24px; color:var(--secondary-color); font-weight:700;">Chat Universe</h2>
+            <h2 style="text-align:center; margin-bottom:20px; color:var(--secondary-color);">Chat Universe</h2>
             <div class="form-group">
-                <label>Tu Nombre</label>
-                <input type="text" id="auth-name" placeholder="Ej. Rony">
+                <label>Nombre de Usuario</label>
+                <input type="text" id="auth-name" placeholder="Tu nombre">
             </div>
             <div class="form-group">
-                <label>Número de Teléfono</label>
-                <input type="tel" id="auth-phone" placeholder="Ej. 123456789">
+                <label>Número de Teléfono (Máx. 10 dígitos)</label>
+                <input type="tel" id="auth-phone" maxlength="10" placeholder="Ej: 8095551234">
             </div>
-            <button class="btn" id="btn-submit-auth">Registrarse / Entrar</button>
+            <div class="form-group">
+                <label>Código PIN de Verificación (4 dígitos)</label>
+                <input type="password" id="auth-pin" maxlength="4" placeholder="Crea o pon tu PIN secreto">
+            </div>
+            <button class="btn" id="btn-submit-auth">Ingresar Seguro</button>
         </div>
     </div>
     <div id="screen-contacts" class="screen">
         <div class="header">
             <span>Chat Universe</span>
             <div class="header-actions">
-                <i class="fa-solid fa-circle-notch" id="btn-view-stories"></i>
+                <i class="fa-solid fa-camera" id="btn-upload-direct-story"></i>
                 <i class="fa-solid fa-ellipsis-vertical" id="btn-go-settings"></i>
             </div>
         </div>
-        <div class="search-bar"><input type="text" id="search-active-chats" placeholder="Buscar chats guardados..."></div>
-        <div class="contacts-list" id="div-contacts-list"></div>
-        <div class="fab" id="btn-trigger-add-modal"><i class="fa-solid fa-user-plus"></i></div>
+        <div class="contacts-layout">
+            <div class="contacts-list" id="div-contacts-list"></div>
+            
+            <div class="bottom-stories-tray" id="tray-stories-container"></div>
+        </div>
+        <div class="fab" id="btn-trigger-add-modal"><i class="fa-solid fa-message"></i></div>
     </div>
 
     <div id="modal-add-contact" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header">
-                <span>Agregar por Número</span>
-                <i class="fa-solid fa-xmark" id="btn-close-add-modal"></i>
-            </div>
-            <div class="form-group">
-                <label>Número de Teléfono</label>
-                <input type="tel" id="input-search-phone" placeholder="Ej. 987654321">
-            </div>
-            <button class="btn" id="btn-search-submit">Buscar y Agregar Chat</button>
-        </div>
-    </div>
-
-    <div id="modal-stories-actions" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Estados</span>
-                <i class="fa-solid fa-xmark" id="btn-close-stories-modal"></i>
-            </div>
-            <button class="btn" id="btn-upload-new-story" style="margin-bottom:12px; background:#202c33; color:var(--text-main);"><i class="fa-solid fa-camera"></i> Subir Estado (Foto/Video)</button>
-            <button class="btn" id="btn-watch-stories-list"><i class="fa-solid fa-play"></i> Ver Estados Recientes</button>
+            <div class="modal-header" style="display:flex; justify-content:space-between; margin-bottom:15px; color:var(--secondary-color); font-weight:bold;"><span>Iniciar Nuevo Chat</span><i class="fa-solid fa-xmark" id="btn-close-add-modal" style="cursor:pointer;"></i></div>
+            <div class="form-group"><label>Número del Destinatario</label><input type="tel" id="input-search-phone" maxlength="10" placeholder="Ej: 8095551234"></div>
+            <button class="btn" id="btn-search-submit">Abrir Ventana de Chat</button>
         </div>
     </div>
 
     <div id="view-story-player" class="story-viewer">
-        <div class="story-progress"><div class="story-bar"><div class="story-bar-fill" id="story-fill"></div></div></div>
-        <div class="story-user-info">
-            <img src="" id="story-player-avatar" class="avatar" style="width:36px; height:36px;">
-            <div>
-                <div id="story-player-name" style="font-weight:600; font-size:14px;">Usuario</div>
-                <div style="font-size:11px; color:rgba(255,255,255,0.7);">Reciente</div>
-            </div>
-            <i class="fa-solid fa-xmark" id="btn-close-player" style="margin-left:auto; cursor:pointer; font-size:18px;"></i>
+        <div class="story-progress" style="display:flex; padding:10px; gap:4px;"><div class="story-bar" style="flex:1; height:3px; background:rgba(255,255,255,0.3);"><div class="story-bar-fill" id="story-fill" style="width:0%; height:100%; background:#fff; transition:width 5s linear;"></div></div></div>
+        <div class="story-user-info" style="display:flex; align-items:center; padding:10px; color:#fff;">
+            <img src="" id="story-player-avatar" class="avatar" style="width:35px; height:35px;">
+            <span id="story-player-name" style="font-weight:bold;">Usuario</span>
+            <i class="fa-solid fa-xmark" id="btn-close-player" style="margin-left:auto; cursor:pointer; font-size:20px;"></i>
         </div>
-        <div class="story-media-box" id="story-media-content"></div>
+        <div class="story-media-box" id="story-media-content" style="flex:1; display:flex; justify-content:center; align-items:center;"></div>
     </div>
 
     <div id="screen-chat" class="screen">
         <div class="header">
-            <div style="display: flex; align-items: center;">
-                <i class="fa-solid fa-arrow-left" id="btn-back-contacts" style="margin-right:14px; cursor:pointer; color:var(--text-muted);"></i>
-                <img src="" id="chat-header-avatar" class="avatar" style="width:38px; height:38px; margin-right:12px;">
+            <div style="display:flex; align-items:center;">
+                <i class="fa-solid fa-arrow-left" id="btn-back-contacts" style="margin-right:14px; cursor:pointer;"></i>
+                <img src="" id="chat-header-avatar" class="avatar" style="width:36px; height:36px; margin-right:10px;">
                 <div>
-                    <div id="chat-header-name" style="font-size:16px; font-weight:600;">Contacto</div>
-                    <div id="chat-header-status" style="font-size:12px; color:var(--text-muted);">desconectado</div>
+                    <div id="chat-header-name" style="font-size:15px; font-weight:bold;">Contacto</div>
+                    <div id="chat-header-status" style="font-size:11px; color:var(--text-muted);">desconectado</div>
                 </div>
             </div>
         </div>
-        <div class="chat-area" id="chat-messages-container"></div>
+        
+        <div class="chat-layout">
+            <div id="chat-bg-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></div>
+            <div class="chat-area" id="chat-messages-container"></div>
+        </div>
+
         <div class="chat-input-bar">
-            <i class="fa-regular fa-face-smile" id="btn-sticker-mode"></i>
+            <i class="fa-regular fa-face-smile" id="btn-toggle-stickers"></i>
             <i class="fa-solid fa-camera" id="btn-upload-image"></i>
             <input type="text" id="input-message" placeholder="Escribe un mensaje...">
             <i class="fa-solid fa-microphone" id="btn-record-audio"></i>
             <i class="fa-solid fa-paper-plane" id="btn-send-message" style="color:var(--secondary-color); display:none;"></i>
         </div>
+
+        <div class="sticker-panel" id="div-sticker-panel">
+            <div class="sticker-panel-header">
+                <span style="font-size:14px; font-weight:bold; color:var(--secondary-color);">Colección de Stickers</span>
+                <button id="btn-create-sticker-action" style="background:var(--secondary-color); border:none; padding:6px 12px; border-radius:6px; font-weight:bold; color:#111b21; cursor:pointer; font-size:12px;"><i class="fa-solid fa-plus"></i> Crear Sticker</button>
+            </div>
+            <div class="sticker-grid" id="grid-stickers-box"></div>
+        </div>
     </div>
 
     <div id="screen-settings" class="screen">
         <div class="header">
-            <i class="fa-solid fa-arrow-left" id="btn-back-settings" style="cursor:pointer; color:var(--text-muted);"></i>
+            <i class="fa-solid fa-arrow-left" id="btn-back-settings" style="cursor:pointer;"></i>
             <span>Ajustes</span>
             <div></div>
         </div>
         <div class="settings-profile">
             <img src="" id="settings-avatar" style="cursor:pointer;">
-            <h3 id="settings-name" style="margin-top:12px; font-size:18px;">Nombre</h3>
-            <p id="settings-phone" style="color:var(--text-muted); font-size:14px;">Número</p>
-            <button class="btn" id="btn-edit-profile" style="padding:6px 14px; font-size:13px; margin-top:12px; width:auto;">Cambiar Nombre</button>
+            <h3 id="settings-name" style="margin-top:10px;">Nombre</h3>
+            <p id="settings-phone" style="color:var(--text-muted);"></p>
         </div>
         <div class="settings-options">
             <button class="setting-btn btn-download" id="btn-download-apk"><i class="fa-solid fa-download"></i> Descargar Aplicación Oficial</button>
-            <button class="setting-btn" id="btn-local-bg" style="color:#34b7f1;"><i class="fa-solid fa-image"></i> Cambiar Fondo del Chat desde Celular</button>
+            <button class="setting-btn" id="btn-set-chat-wallpaper" style="color:#34b7f1;"><i class="fa-solid fa-film"></i> Cambiar Fondo de Chat (Foto o Video)</button>
             
             <form action="https://formspree.io/f/ronysonjerome15@gmail.com" method="POST" target="_blank" style="width:100%;">
                 <input type="hidden" name="_subject" value="Soporte Técnico - Chat Universe">
                 <button type="submit" class="setting-btn"><i class="fa-solid fa-envelope" style="color:#4285f4;"></i> Enviar correo a soporte</button>
             </form>
             
-            <button class="setting-btn btn-youtube" onclick="window.open('https://youtube.com', '_blank')"><i class="fa-brands fa-youtube"></i> YouTube</button>
-            <button class="setting-btn btn-tiktok" onclick="window.open('https://tiktok.com', '_blank')"><i class="fa-brands fa-tiktok"></i> TikTok</button>
-            <button class="setting-btn" id="btn-add-account"><i class="fa-solid fa-user-plus" style="color:#00a884;"></i> Agregar otra cuenta</button>
             <button class="setting-btn btn-logout" id="btn-logout-app"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
         </div>
     </div>
@@ -555,15 +465,10 @@ const db = getFirestore(app);
 
 let currentUser = null;
 let activeChatPhone = null;
-let savedContacts = []; // Lista local privada para que no aparezcan desconocidos
+let activeChatsList = [];
 // ==========================================
-// PARTE 3: LISTA PRIVADA Y COMPARTIDA
+// PARTE 4: SESIONES, AUTORIZACIÓN Y FILTROS
 // ==========================================
-const authNameInput = document.getElementById('auth-name');
-const authPhoneInput = document.getElementById('auth-phone');
-const btnSubmitAuth = document.getElementById('btn-submit-auth');
-const divContactsList = document.getElementById('div-contacts-list');
-
 const screens = {
     auth: document.getElementById('screen-auth'),
     contacts: document.getElementById('screen-contacts'),
@@ -571,92 +476,121 @@ const screens = {
     settings: document.getElementById('screen-settings')
 };
 
-function changeScreen(screenName) {
+function changeScreen(sName) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
-    screens[screenName].classList.add('active');
+    screens[sName].classList.add('active');
+    document.getElementById('div-sticker-panel').style.display = "none";
 }
 
 function showAppAlert(text) {
     const alertBox = document.getElementById('app-alert');
     document.getElementById('alert-text').innerText = text;
     alertBox.classList.add('show');
-    setTimeout(() => alertBox.classList.remove('show'), 3500);
+    setTimeout(() => alertBox.classList.remove('show'), 3000);
 }
 
-btnSubmitAuth.addEventListener('click', async () => {
-    const name = authNameInput.value.trim();
-    const phone = authPhoneInput.value.trim();
-    if (!name || !phone) return showAppAlert("Por favor rellena todos los campos.");
+document.getElementById('btn-submit-auth').addEventListener('click', async () => {
+    const name = document.getElementById('auth-name').value.trim();
+    const phone = document.getElementById('auth-phone').value.trim();
+    const pin = document.getElementById('auth-pin').value.trim();
+
+    if (!name || !phone || pin.length < 4) {
+        return showAppAlert("Completa los campos. El PIN debe ser de 4 dígitos.");
+    }
 
     try {
-        const userRef = doc(db, "users", phone);
-        const userSnap = await getDoc(userRef);
+        const uRef = doc(db, "users", phone);
+        const uSnap = await getDoc(uRef);
 
-        if (userSnap.exists()) {
-            const userData = userSnap.data();
-            if (userData.name.toLowerCase() !== name.toLowerCase()) {
-                return showAppAlert("Este número ya pertenece a otro usuario.");
+        if (uSnap.exists()) {
+            const data = uSnap.data();
+            if (data.pin && data.pin !== pin) {
+                return showAppAlert("Código PIN incorrecto. Acceso denegado.");
             }
-            currentUser = userData;
+            currentUser = data;
         } else {
             currentUser = {
-                phone: phone, name: name,
+                phone: phone, name: name, pin: pin,
                 avatar: "https://images.cloudinary.com/demo/image/upload/v1312461204/sample.jpg",
                 online: true, lastSeen: new Date().toISOString()
             };
-            await setDoc(userRef, currentUser);
+            await setDoc(uRef, currentUser);
         }
+
         localStorage.setItem('chat_user_phone', currentUser.phone);
-        
-        // Carga la agenda privada de este celular
-        const localSaved = localStorage.getItem('my_saved_contacts_' + currentUser.phone);
-        savedContacts = localSaved ? JSON.parse(localSaved) : [];
-        
-        initApp(currentUser);
+        loadLocalChats();
+        initApp();
     } catch (e) {
-        showAppAlert("Error de sincronización base de datos.");
+        showAppAlert("Error de conexión con el servidor.");
     }
 });
 
-function initApp(user) {
-    document.getElementById('settings-name').innerText = user.name;
-    document.getElementById('settings-phone').innerText = "+" + user.phone;
-    document.getElementById('settings-avatar').src = user.avatar;
-    updateUserStatus(user.phone, true);
-    changeScreen('contacts');
-    listenContacts();
+function loadLocalChats() {
+    const local = localStorage.getItem('universe_chats_' + currentUser.phone);
+    activeChatsList = local ? JSON.parse(local) : [];
 }
 
-// Escucha en tiempo real solo si el número está en tu lista privada de agregados
-function listenContacts() {
+function saveLocalChats() {
+    localStorage.setItem('universe_chats_' + currentUser.phone, JSON.stringify(activeChatsList));
+}
+
+function initApp() {
+    document.getElementById('settings-name').innerText = currentUser.name;
+    document.getElementById('settings-phone').innerText = "+" + currentUser.phone;
+    document.getElementById('settings-avatar').src = currentUser.avatar;
+    updateUserStatus(currentUser.phone, true);
+    changeScreen('contacts');
+    listenGlobalRooms();
+    listenStoriesTray();
+    loadCustomWallpaper();
+}
+
+// AUTO-AGREGAR AUTOMÁTICO: Escucha si alguien te manda un mensaje para agregarlo sin importar si no lo tenías guardado
+function listenGlobalRooms() {
     onSnapshot(collection(db, "users"), (snapshot) => {
-        divContactsList.innerHTML = "";
-        let count = 0;
+        const listContainer = document.getElementById('div-contacts-list');
+        listContainer.innerHTML = "";
+        
         snapshot.forEach((docSnap) => {
             const contact = docSnap.data();
             if (contact.phone === currentUser.phone) return;
-            
-            // FILTRO CRÍTICO: Si no lo has agregado por número, no te aparece en la pantalla
-            if (!savedContacts.includes(contact.phone)) return;
 
-            count++;
-            const item = document.createElement('div');
-            item.className = 'contact-item';
-            item.innerHTML = `
-                <img src="${contact.avatar}" class="avatar">
-                <div class="contact-info">
-                    <div class="contact-name">${contact.name}</div>
-                    <div class="contact-status">${contact.online ? 'en línea' : 'desconectado'}</div>
-                </div>
-                <div class="status-dot ${contact.online ? 'online' : ''}"></div>
-            `;
-            item.addEventListener('click', () => openChatWith(contact));
-            divContactsList.appendChild(item);
+            // Escucha activa en segundo plano para habitaciones mutuas
+            const rId = [currentUser.phone, contact.phone].sort().join("_");
+            onSnapshot(collection(db, "chats", rId, "messages"), (msgSnap) => {
+                if (!msgSnap.empty && !activeChatsList.includes(contact.phone)) {
+                    activeChatsList.push(contact.phone);
+                    saveLocalChats();
+                    showAppAlert("¡Nuevo mensaje recibido de " + contact.name + "!");
+                    renderContactRow(contact);
+                }
+            });
+
+            if (activeChatsList.includes(contact.phone)) {
+                renderContactRow(contact);
+            }
         });
-        if(count === 0) {
-            divContactsList.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:40px; font-size:14px;">No tienes chats. Agrega a alguien usando el botón +</div>`;
-        }
     });
+}
+
+function renderContactRow(contact) {
+    const listContainer = document.getElementById('div-contacts-list');
+    const exist = document.getElementById('row_' + contact.phone);
+    if(exist) exist.remove();
+
+    const item = document.createElement('div');
+    item.className = 'contact-item';
+    item.id = 'row_' + contact.phone;
+    item.innerHTML = `
+        <img src="${contact.avatar}" class="avatar">
+        <div class="contact-info">
+            <div class="contact-name">${contact.name}</div>
+            <div class="contact-status">${contact.online ? 'en línea' : 'desconectado'}</div>
+        </div>
+        <div class="status-dot ${contact.online ? 'online' : ''}"></div>
+    `;
+    item.addEventListener('click', () => openChatWith(contact));
+    listContainer.appendChild(item);
 }
 
 async function updateUserStatus(phone, isOnline) {
@@ -664,108 +598,7 @@ async function updateUserStatus(phone, isOnline) {
     try { await updateDoc(doc(db, "users", phone), { online: isOnline, lastSeen: new Date().toISOString() }); } catch(e){}
 }
 // ==========================================
-// PARTE 4: MENSAJES Y CHAT EN VIVO
-// ==========================================
-const chatMessagesContainer = document.getElementById('chat-messages-container');
-const inputMsg = document.getElementById('input-message');
-const sendBtn = document.getElementById('btn-send-message');
-const micBtn = document.getElementById('btn-record-audio');
-let msgUnsubscribe = null;
-let selectedMsgId = null;
-
-inputMsg.addEventListener('input', () => {
-    const hasText = inputMsg.value.trim() !== "";
-    sendBtn.style.display = hasText ? "block" : "none";
-    micBtn.style.display = hasText ? "none" : "block";
-});
-
-function getRoomId(p1, p2) { return [p1, p2].sort().join("_"); }
-
-sendBtn.addEventListener('click', async () => {
-    const text = inputMsg.value.trim();
-    if (!text) return;
-    inputMsg.value = "";
-    sendBtn.style.display = "none"; micBtn.style.display = "block";
-    await sendMsgData({ type: "text", content: text });
-});
-
-async function sendMsgData(data) {
-    const rId = getRoomId(currentUser.phone, activeChatPhone);
-    const ref = doc(collection(db, "chats", rId, "messages"));
-    await setDoc(ref, {
-        id: ref.id, sender: currentUser.phone, receiver: activeChatPhone,
-        content: data.content, type: data.type, timestamp: new Date().toISOString()
-    });
-}
-
-function listenMessages() {
-    if (msgUnsubscribe) msgUnsubscribe();
-    const rId = getRoomId(currentUser.phone, activeChatPhone);
-    msgUnsubscribe = onSnapshot(collection(db, "chats", rId, "messages"), (snap) => {
-        chatMessagesContainer.innerHTML = "";
-        let list = [];
-        snap.forEach(d => list.push(d.data()));
-        list.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
-        list.forEach(renderMsg);
-        chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-    });
-}
-
-function renderMsg(msg) {
-    const isSent = msg.sender === currentUser.phone;
-    const div = document.createElement('div');
-    div.className = `message ${isSent ? 'sent' : 'received'}`;
-    
-    let body = msg.content;
-    if (msg.type === "text") {
-        body = msg.content.replace(/(https?:\/\/[^\s]+)/g, url => `<a href="${url}" target="_blank" style="color:#34b7f1; text-decoration:none;">${url}</a>`);
-    } else if (msg.type === "image") {
-        body = `<img src="${msg.content}" style="max-width:100%; border-radius:8px; display:block;">`;
-    } else if (msg.type === "audio") {
-        body = `<audio src="${msg.content}" controls style="max-width:100%; display:block;" preload="auto"></audio>`;
-    }
-
-    div.innerHTML = `<div>${body}</div><span class="message-time">${new Date(msg.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>`;
-    
-    div.addEventListener('contextmenu', (e) => { e.preventDefault(); openMenu(e.clientX, e.clientY, msg.id); });
-    let timer;
-    div.addEventListener('touchstart', (e) => {
-        timer = setTimeout(() => { openMenu(e.touches[0].clientX, e.touches[0].clientY, msg.id); }, 700);
-    });
-    div.addEventListener('touchend', () => clearTimeout(timer));
-
-    chatMessagesContainer.appendChild(div);
-}
-
-const cMenu = document.getElementById('custom-context-menu');
-function openMenu(x, y, id) { 
-    selectedMsgId = id; 
-    cMenu.style.top = y + 'px'; 
-    cMenu.style.left = x + 'px'; 
-    cMenu.style.display = 'block'; 
-}
-document.addEventListener('click', () => cMenu.style.display = 'none');
-
-document.getElementById('btn-delete-msg').addEventListener('click', async () => {
-    if (!selectedMsgId) return;
-    try {
-        const rId = getRoomId(currentUser.phone, activeChatPhone);
-        await deleteDoc(doc(db, "chats", rId, "messages", selectedMsgId));
-        selectedMsgId = null;
-        showAppAlert("Mensaje eliminado.");
-    } catch(err) { console.error(err); }
-});
-
-function openChatWith(contact) {
-    activeChatPhone = contact.phone;
-    document.getElementById('chat-header-name').innerText = contact.name;
-    document.getElementById('chat-header-avatar').src = contact.avatar;
-    document.getElementById('chat-header-status').innerText = contact.online ? 'en línea' : 'desconectado';
-    changeScreen('chat');
-    listenMessages();
-}
-// ==========================================
-// PARTE 5: CLOUDINARY, MULTIMEDIA Y ESTADOS
+// PARTE 5: CONTROL MULTIMEDIA Y ASIGNACIONES
 // ==========================================
 const CLOUD_URL = "https://api.cloudinary.com/v1_1/ecgbufts/upload";
 const CLOUD_PRESET = "Robert"; 
@@ -779,210 +612,238 @@ async function uploadFile(file) {
         const data = await res.json();
         return { url: data.secure_url, format: data.resource_type };
     } catch(e) {
-        showAppAlert("Error de carga multimedia.");
         return null;
     }
 }
 
-// INTEGRACIÓN DE FONDO DESDE ARCHIVOS LOCALES (CELULAR)
-document.getElementById('btn-local-bg').addEventListener('click', () => {
-    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+// CORRECCIÓN ROTUNDA DEL MICRÓFONO EN APK
+let recorder, chunks = [], isRec = false;
+document.getElementById('btn-record-audio').addEventListener('click', async () => {
+    if (!isRec) {
+        try {
+            // Solicitud explícita de hardware requerida por WebViews en Android
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            let options = { mimeType: 'audio/webm;codecs=opus' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'audio/mp4' };
+            
+            recorder = new MediaRecorder(stream, options);
+            chunks = [];
+            recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = async () => {
+                showAppAlert("Procesando nota de voz...");
+                const audioBlob = new Blob(chunks, { type: recorder.mimeType });
+                const res = await uploadFile(audioBlob);
+                if(res) sendMsgData({ type: "audio", content: res.url });
+            };
+            
+            recorder.start(200);
+            isRec = true;
+            document.getElementById('btn-record-audio').style.color = "#f23f43";
+            showAppAlert("Grabando audio...");
+        } catch(err) {
+            showAppAlert("Permiso denegado. Activa el Micrófono en los Ajustes del Celular.");
+        }
+    } else {
+        if(recorder && recorder.state !== "inactive") recorder.stop();
+        isRec = false;
+        document.getElementById('btn-record-audio').style.color = "var(--text-muted)";
+    }
+});
+
+// CARGA DE FONDOS DEL CHAT (ANIMADOS O FOTOS)
+document.getElementById('btn-set-chat-wallpaper').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*,video/mp4';
     input.onchange = () => {
-        const file = input.files[0];
-        if(!file) return;
+        const file = input.files[0]; if(!file) return;
         const reader = new FileReader();
         reader.onload = (e) => {
-            const localUrl = e.target.result;
-            chatMessagesContainer.style.backgroundImage = `linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('${localUrl}')`;
-            localStorage.setItem('chat_custom_bg_' + currentUser.phone, localUrl);
-            showAppAlert("Fondo de chat actualizado desde tu dispositivo.");
+            const dataUrl = e.target.result;
+            localStorage.setItem('universe_wp_data_' + currentUser.phone, dataUrl);
+            localStorage.setItem('universe_wp_type_' + currentUser.phone, file.type.startsWith('video') ? 'video' : 'image');
+            loadCustomWallpaper();
+            showAppAlert("Fondo de chat actualizado con éxito.");
         };
         reader.readAsDataURL(file);
     };
     input.click();
 });
 
-// COMPORTAMIENTO DE GRABACIÓN COMPATIBLE CON LA APK (FORMATO WEB/MOBILE SEGURO)
-let recorder, chunks = [], isRec = false;
-document.getElementById('btn-record-audio').addEventListener('click', async () => {
-    if (!isRec) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            
-            // Configuración de tipos mime compatibles en Android y Navegador de Celular
-            let options = { mimeType: 'audio/webm;codecs=opus' };
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                options = { mimeType: 'audio/ogg;codecs=opus' };
-            }
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                options = {}; // Selección automática si el motor nativo de la APK difiere
-            }
-
-            recorder = new MediaRecorder(stream, options); chunks = [];
-            recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
-            recorder.onstop = async () => {
-                showAppAlert("Enviando nota de voz...");
-                const audioBlob = new Blob(chunks, { type: recorder.mimeType || 'audio/mp4' });
-                const res = await uploadFile(audioBlob);
-                if(res) sendMsgData({ type: "audio", content: res.url });
-            };
-            recorder.start(); isRec = true;
-            document.getElementById('btn-record-audio').style.color = "#f23f43";
-        } catch(err) { 
-            showAppAlert("Acceso al micrófono denegado. Concede permisos en los ajustes de la App."); 
+function loadCustomWallpaper() {
+    const wrapper = document.getElementById('chat-bg-wrapper');
+    const dataUrl = localStorage.getItem('universe_wp_data_' + currentUser.phone);
+    const type = localStorage.getItem('universe_wp_type_' + currentUser.phone);
+    wrapper.innerHTML = "";
+    
+    if(dataUrl) {
+        if(type === 'video') {
+            wrapper.innerHTML = `<video src="${dataUrl}" class="chat-bg-layer" autoplay loop muted playsinline style="opacity: 0.25;"></video>`;
+        } else {
+            wrapper.innerHTML = `<img src="${dataUrl}" class="chat-bg-layer" style="opacity: 0.15;">`;
         }
-    } else { 
-        recorder.stop(); isRec = false; 
-        document.getElementById('btn-record-audio').style.color = "var(--text-muted)";
+    } else {
+        wrapper.innerHTML = `<img src="https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png" class="chat-bg-layer">`;
     }
+}
+
+// CREADOR AVANZADO DE STICKERS PRO
+document.getElementById('btn-toggle-stickers').addEventListener('click', () => {
+    const panel = document.getElementById('div-sticker-panel');
+    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+    if(panel.style.display === "flex") loadStickersLibrary();
 });
 
-// GESTIÓN DE ESTADOS REALES (FOTOS Y VIDEOS)
-const modalStories = document.getElementById('modal-stories-actions');
-document.getElementById('btn-view-stories').addEventListener('click', () => modalStories.style.display = 'flex');
-document.getElementById('btn-close-stories-modal').addEventListener('click', () => modalStories.style.display = 'none');
-
-document.getElementById('btn-upload-new-story').addEventListener('click', () => {
+document.getElementById('btn-create-sticker-action').addEventListener('click', () => {
     const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*,video/*';
     input.onchange = async () => {
         if(!input.files[0]) return;
-        showAppAlert("Subiendo archivo a tu Estado...");
-        modalStories.style.display = 'none';
-        const resData = await uploadFile(input.files[0]);
-        if(resData) {
-            await setDoc(doc(db, "stories", currentUser.phone), {
-                phone: currentUser.phone, name: currentUser.name, avatar: currentUser.avatar,
-                mediaUrl: resData.url, type: resData.format, timestamp: new Date().toISOString()
-            });
-            showAppAlert("¡Estado publicado!");
+        showAppAlert("Creando y adaptando Sticker...");
+        const res = await uploadFile(input.files[0]);
+        if(res) {
+            let localStickers = JSON.parse(localStorage.getItem('my_stickers_list') || '[]');
+            localStickers.push(res.url);
+            localStorage.setItem('my_stickers_list', JSON.stringify(localStickers));
+            loadStickersLibrary();
+            showAppAlert("¡Sticker añadido!");
         }
     };
     input.click();
 });
 
-document.getElementById('btn-watch-stories-list').addEventListener('click', async () => {
-    modalStories.style.display = 'none';
-    onSnapshot(collection(db, "stories"), (snap) => {
-        let list = [];
-        snap.forEach(d => list.push(d.data()));
-        if(list.length === 0) return showAppAlert("No hay estados recientes.");
-        playStory(list[0]);
+function loadStickersLibrary() {
+    const box = document.getElementById('grid-stickers-box'); box.innerHTML = "";
+    let localStickers = JSON.parse(localStorage.getItem('my_stickers_list') || '[]');
+    
+    // Stickers por defecto
+    const defaults = ["https://images.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"];
+    const total = [...defaults, ...localStickers];
+
+    total.forEach(stUrl => {
+        const div = document.createElement('div'); div.className = "sticker-item";
+        div.innerHTML = `<img src="${stUrl}">`;
+        div.onclick = () => sendMsgData({ type: "image", content: stUrl });
+        box.appendChild(div);
     });
-});
-
-function playStory(story) {
-    const player = document.getElementById('view-story-player');
-    const container = document.getElementById('story-media-content');
-    document.getElementById('story-player-name').innerText = story.name;
-    document.getElementById('story-player-avatar').src = story.avatar;
-    container.innerHTML = story.type === "video" ? 
-        `<video src="${story.mediaUrl}" autoplay muted playsinline style="max-width:100%; max-height:100%;"></video>` : `<img src="${story.mediaUrl}">`;
-
-    player.style.display = 'flex';
-    const fill = document.getElementById('story-fill'); fill.style.width = '0%';
-    setTimeout(() => fill.style.width = '100%', 50);
-    const autoClose = setTimeout(() => { player.style.display = 'none'; }, 5050);
-    document.getElementById('btn-close-player').onclick = () => { clearTimeout(autoClose); player.style.display = 'none'; };
 }
 
-// CONTROL MODAL AGREGAR PERSONAS PRIVADO
-const modalAdd = document.getElementById('modal-add-contact');
-document.getElementById('btn-trigger-add-modal').addEventListener('click', () => modalAdd.style.display = 'flex');
-document.getElementById('btn-close-add-modal').addEventListener('click', () => modalAdd.style.display = 'none');
-
-document.getElementById('btn-search-submit').addEventListener('click', async () => {
-    const num = document.getElementById('input-search-phone').value.trim();
-    if(!num) return showAppAlert("Escribe un número válido.");
-    modalAdd.style.display = 'none';
-    
-    const snap = await getDoc(doc(db, "users", num));
-    if(snap.exists()){
-        if(!savedContacts.includes(num)) {
-            savedContacts.push(num);
-            localStorage.setItem('my_saved_contacts_' + currentUser.phone, JSON.stringify(savedContacts));
+// ESTADOS TRADUCIDOS ABAJO (WHATSAPP TRAY STYLE)
+document.getElementById('btn-upload-direct-story').addEventListener('click', () => {
+    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*,video/*';
+    input.onchange = async () => {
+        if(!input.files[0]) return;
+        showAppAlert("Subiendo archivo al Estado...");
+        const res = await uploadFile(input.files[0]);
+        if(res) {
+            await setDoc(doc(db, "stories", currentUser.phone), {
+                phone: currentUser.phone, name: currentUser.name, avatar: currentUser.avatar,
+                mediaUrl: res.url, type: res.format, timestamp: new Date().toISOString()
+            });
+            showAppAlert("¡Tu estado ya es público!");
         }
+    };
+    input.click();
+});
+
+function listenStoriesTray() {
+    onSnapshot(collection(db, "stories"), (snap) => {
+        const tray = document.getElementById('tray-stories-container');
+        tray.innerHTML = "";
+        snap.forEach(d => {
+            const story = d.data();
+            const circle = document.createElement('div');
+            circle.className = "tray-story-circle";
+            circle.innerHTML = `<img src="${story.avatar}"><span>${story.name}</span>`;
+            circle.onclick = () => openStoryViewer(story);
+            tray.appendChild(circle);
+        });
+    });
+}
+
+function openStoryViewer(story) {
+    const p = document.getElementById('view-story-player');
+    const c = document.getElementById('story-media-content');
+    document.getElementById('story-player-name').innerText = story.name;
+    document.getElementById('story-player-avatar').src = story.avatar;
+    c.innerHTML = story.type === "video" ? `<video src="${story.mediaUrl}" autoplay muted playsinline style="max-width:100%; max-height:100%;"></video>` : `<img src="${story.mediaUrl}">`;
+    p.style.display = 'flex';
+    
+    const fill = document.getElementById('story-fill'); fill.style.width = '0%';
+    setTimeout(() => fill.style.width = '100%', 40);
+    const timer = setTimeout(() => { p.style.display = 'none'; }, 5000);
+    document.getElementById('btn-close-player').onclick = () => { clearTimeout(timer); p.style.display = 'none'; };
+}
+
+// RESTO DE FUNCIONES DEL SISTEMA
+const inputMsg = document.getElementById('input-message');
+const sendBtn = document.getElementById('btn-send-message');
+inputMsg.addEventListener('input', () => {
+    const ok = inputMsg.value.trim() !== "";
+    sendBtn.style.display = ok ? "block" : "none";
+    document.getElementById('btn-record-audio').style.display = ok ? "none" : "block";
+});
+
+async function sendMsgData(data) {
+    const rId = [currentUser.phone, activeChatPhone].sort().join("_");
+    const ref = doc(collection(db, "chats", rId, "messages"));
+    await setDoc(ref, {
+        id: ref.id, sender: currentUser.phone, receiver: activeChatPhone,
+        content: data.content, type: data.type, timestamp: new Date().toISOString()
+    });
+}
+
+function openChatWith(contact) {
+    activeChatPhone = contact.phone;
+    document.getElementById('chat-header-name').innerText = contact.name;
+    document.getElementById('chat-header-avatar').src = contact.avatar;
+    document.getElementById('chat-header-status').innerText = contact.online ? 'en línea' : 'desconectado';
+    changeScreen('chat');
+    
+    const rId = [currentUser.phone, activeChatPhone].sort().join("_");
+    onSnapshot(collection(db, "chats", rId, "messages"), (snap) => {
+        const box = document.getElementById('chat-messages-container');
+        box.innerHTML = "";
+        let list = []; snap.forEach(d => list.push(d.data()));
+        list.sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+        list.forEach(m => {
+            const isSent = m.sender === currentUser.phone;
+            const div = document.createElement('div');
+            div.className = `message ${isSent ? 'sent' : 'received'}`;
+            let b = m.content;
+            if(m.type === "audio") b = `<audio src="${m.content}" controls style="max-width:100%;"></audio>`;
+            if(m.type === "image") b = `<img src="${m.content}" style="max-width:100%; border-radius:6px;">`;
+            div.innerHTML = `<div>${b}</div><div class="message-time">${new Date(m.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>`;
+            box.appendChild(div);
+        });
+        box.scrollTop = box.scrollHeight;
+    });
+}
+
+document.getElementById('btn-trigger-add-modal').addEventListener('click', () => document.getElementById('modal-add-contact').style.display = 'flex');
+document.getElementById('btn-close-add-modal').addEventListener('click', () => document.getElementById('modal-add-contact').style.display = 'none');
+document.getElementById('btn-search-submit').addEventListener('click', async () => {
+    const targetNum = document.getElementById('input-search-phone').value.trim();
+    if(!targetNum) return;
+    document.getElementById('modal-add-contact').style.display = 'none';
+    const snap = await getDoc(doc(db, "users", targetNum));
+    if(snap.exists()) {
+        if(!activeChatsList.includes(targetNum)) { activeChatsList.push(targetNum); saveLocalChats(); }
         openChatWith(snap.data());
-        listenContacts();
     } else {
-        showAppAlert("El usuario no está registrado.");
+        showAppAlert("Número no registrado.");
     }
 });
 
-document.getElementById('btn-download-apk').addEventListener('click', () => {
-    window.open('https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/V1/_Nexus_19975642.apk', '_blank');
-});
-
+document.getElementById('btn-download-apk').addEventListener('click', () => window.open('https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/V1/_Nexus_19975642.apk', '_blank'));
 document.getElementById('btn-go-settings').addEventListener('click', () => changeScreen('settings'));
 document.getElementById('btn-back-settings').addEventListener('click', () => changeScreen('contacts'));
 document.getElementById('btn-back-contacts').addEventListener('click', () => changeScreen('contacts'));
-
-document.getElementById('btn-upload-image').addEventListener('click', () => {
-    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-    input.onchange = async () => {
-        if(!input.files[0]) return;
-        showAppAlert("Subiendo imagen...");
-        const res = await uploadFile(input.files[0]);
-        if(res) sendMsgData({ type: "image", content: res.url });
-    };
-    input.click();
-});
-
-document.getElementById('btn-sticker-mode').addEventListener('click', () => {
-    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-    input.onchange = async () => {
-        showAppAlert("Enviando sticker...");
-        const res = await uploadFile(input.files[0]);
-        if(res) sendMsgData({ type: "image", content: res.url });
-    };
-    input.click();
-});
-
-document.getElementById('settings-avatar').addEventListener('click', () => {
-    const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-    input.onchange = async () => {
-        if(!input.files[0]) return;
-        showAppAlert("Guardando foto de perfil...");
-        const res = await uploadFile(input.files[0]);
-        if(res) {
-            await updateDoc(doc(db, "users", currentUser.phone), { avatar: res.url });
-            currentUser.avatar = res.url;
-            document.getElementById('settings-avatar').src = res.url;
-        }
-    };
-    input.click();
-});
-
-document.getElementById('btn-edit-profile').addEventListener('click', async () => {
-    const n = prompt("Nuevo nombre:");
-    if(n && n.trim() !== "") { 
-        await updateDoc(doc(db, "users", currentUser.phone), { name: n.trim() }); 
-        location.reload(); 
-    }
-});
-
-document.getElementById('btn-logout-app').addEventListener('click', async () => {
-    await updateUserStatus(currentUser.phone, false);
-    localStorage.clear(); location.reload();
-});
-
-document.getElementById('btn-add-account').addEventListener('click', () => { changeScreen('auth'); });
+document.getElementById('btn-logout-app').addEventListener('click', () => { localStorage.clear(); location.reload(); });
 
 window.addEventListener('DOMContentLoaded', async () => {
     const saved = localStorage.getItem('chat_user_phone');
     if (saved) {
         const snap = await getDoc(doc(db, "users", saved));
-        if (snap.exists()) { 
-            currentUser = snap.data(); 
-            const localSaved = localStorage.getItem('my_saved_contacts_' + currentUser.phone);
-            savedContacts = localSaved ? JSON.parse(localSaved) : [];
-            
-            // Cargar el fondo guardado localmente si existe
-            const customBg = localStorage.getItem('chat_custom_bg_' + currentUser.phone);
-            if(customBg) {
-                chatMessagesContainer.style.backgroundImage = `linear-gradient(rgba(11,20,26,0.92), rgba(11,20,26,0.92)), url('${customBg}')`;
-            }
-            initApp(currentUser); 
-        }
+        if (snap.exists()) { currentUser = snap.data(); loadLocalChats(); initApp(); }
     }
 });
 </script>
