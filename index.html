@@ -3,249 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Redes | RGB Neon</title>
-    <!-- Iconos de FontAwesome para que se vea profesional -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fuente moderna Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    
+    <title>Mi Perfil | Super Super Bonito</title>
     <style>
-        /* --- ESTILOS GENERALES Y FONDO --- */
+        /* --- Configuración General --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* Tipografía moderna */
         }
 
         body {
-            background-color: #050505;
-            color: #fff;
-            min-height: 100vh;
+            background-color: #000000; /* Fondo negro profundo */
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        /* Efecto de luces de fondo para que no sea aburrido */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(0, 255, 204, 0.15);
-            border-radius: 50%;
-            filter: blur(100px);
-            top: 10%;
-            left: 10%;
-            animation: moveLight 8s infinite alternate ease-in-out;
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 0, 128, 0.15);
-            border-radius: 50%;
-            filter: blur(100px);
-            bottom: 10%;
-            right: 10%;
-            animation: moveLight 8s infinite alternate-reverse ease-in-out;
-        }
-
-        @keyframes moveLight {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-
-        /* --- CONTENEDOR PRINCIPAL --- */
-        .container {
+        /* --- Contenedor Principal --- */
+        .page-container {
             width: 100%;
-            max-width: 480px;
-            padding: 40px 20px;
+            max-width: 450px; /* Ancho máximo para móvil */
             text-align: center;
-            z-index: 10;
+            padding: 40px 20px;
+            background-color: #0a0a0a; /* Fondo oscuro sutil del contenedor */
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 165, 0, 0.15); /* Sombra naranja sutil */
         }
 
-        /* Foto de Perfil con borde RGB giratorio */
-        .profile-card {
-            position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 20px;
+        /* --- Sección superior: Perfil --- */
+        .profile {
+            margin-bottom: 40px;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(45deg, #ff007f, #00f0ff, #ff007f, #00f0ff);
-            background-size: 400%;
-            animation: borderGlow 4s linear infinite;
-        }
-
-        .profile-card img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #050505;
+            border: 4px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            background: linear-gradient(45deg, #ff007f, #00f0ff);
+        .profile h1 {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff8c00, #ff4500); /* Degradado naranja en el nombre */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+            margin-bottom: 5px;
         }
 
-        p.username {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 30px;
+        .profile p {
+            font-size: 14px;
+            color: #aaaaaa;
+            letter-spacing: 0.5px;
         }
 
-        /* --- BOTONES NEON RGB --- */
-        .links-wrapper {
+        /* --- Sección central: Botones Sociales --- */
+        .social-links {
             display: flex;
-            direction: ltr;
             flex-direction: column;
             gap: 20px;
+            margin-bottom: 45px;
         }
 
-        .btn-link {
+        /* El botón base con borde naranja brillante */
+        .social-btn {
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: block;
             width: 100%;
-            padding: 16px 25px;
-            background: rgba(15, 15, 15, 0.85);
-            border: 2px solid transparent;
-            border-radius: 50px;
-            color: #fff;
+            padding: 18px 25px;
             text-decoration: none;
-            font-size: 1.1rem;
+            color: #ffffff;
+            font-size: 16px;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden; /* Importante para el efecto interior */
+            border: 2px solid #ff4500; /* Borde naranja brillante */
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4); /* Brillo naranja exterior */
+            z-index: 1; /* Para que el texto esté por encima */
+        }
+
+        /* Fondo RGB animado dentro del botón */
+        .social-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,0,255,0.7), rgba(0,255,255,0.7), rgba(255,255,0,0.7)); /* Degradado RGB sutil */
+            background-size: 400% 400%;
+            animation: rgb-slide 8s linear infinite; /* Animación */
+            z-index: -1; /* Detrás del texto */
+            opacity: 0.8; /* Suaviza los colores RGB */
+        }
+
+        /* Efecto de "Glow" adicional y pequeño escalado al pasar el ratón */
+        .social-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.7); /* Brillo naranja más intenso */
+            filter: brightness(1.1); /* Hace que todo el botón brille un poco más */
+        }
+
+        /* Animación del degradado RGB */
+        @keyframes rgb-slide {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Letra/Texto Divisor --- */
+        .divider {
+            font-size: 16px;
+            font-weight: 700;
+            color: #555555;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin: 45px 0;
+            position: relative;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 38%;
+            height: 1px;
+            background: #333333;
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        /* --- Sección inferior: Botón Descarga --- */
+        .download-section {
+            margin-top: 15px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 18px 30px;
+            text-decoration: none;
+            color: #000000;
+            background-color: #ffffff;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 15px;
             transition: all 0.3s ease;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            
-            /* Animación constante del borde de color rápido */
-            background-image: linear-gradient(rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0.95)), 
-                              linear-gradient(120deg, #ff0055, #00ffcc, #9b51e0, #ff0055);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            background-size: 300% 300%;
-            animation: fastRGBBorder 3s linear infinite;
-            
-            /* Brillo de sombra inicial */
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.15), inset 0 0 5px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
         }
 
-        .btn-link i {
-            font-size: 1.4rem;
-            transition: transform 0.3s ease;
+        .download-btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.03);
+            box-shadow: 0 7px 25px rgba(255, 255, 255, 0.2);
         }
 
-        /* Efecto Hover (Cuando pasas el mouse o tocas) */
-        .btn-link:hover {
-            transform: translateY(-4px) scale(1.02);
-            background-image: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)), 
-                              linear-gradient(120deg, #00ffcc, #ff0055, #00ffcc, #ff0055);
-            /* Sombra mucho más intensa y animada */
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), 
-                        0 0 10px rgba(255, 0, 85, 0.6);
+        /* Icono de descarga simple */
+        .download-btn::before {
+            content: '⬇'; /* Icono de flecha hacia abajo */
+            font-size: 20px;
         }
 
-        .btn-link:hover i {
-            transform: rotate(15deg) scale(1.2);
-        }
-
-        /* Icono de flecha sutil al final del botón */
-        .btn-link::after {
-            content: '\f105';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 1.1rem;
-            opacity: 0.6;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .btn-link:hover::after {
-            transform: translateX(5px);
-            opacity: 1;
-        }
-
-        /* Colores icónicos personalizados para los iconos */
-        .tiktok-icon { color: #00f2fe; text-shadow: 0 0 8px rgba(0, 242, 254, 0.5); }
-        .youtube-icon { color: #ff0000; text-shadow: 0 0 8px rgba(255, 0, 0, 0.5); }
-        .instagram-icon { color: #f77737; text-shadow: 0 0 8px rgba(247, 119, 55, 0.5); }
-        .twitch-icon { color: #a154ff; text-shadow: 0 0 8px rgba(161, 84, 255, 0.5); }
-
-        /* --- ANIMACIONES CSS --- */
-        @keyframes borderGlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes fastRGBBorder {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            margin-top: 40px;
-            font-size: 0.8rem;
-            color: #555;
-            letter-spacing: 1px;
-        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Tarjeta de Perfil -->
-        <div class="profile-card">
-            <!-- Reemplaza con tu foto de perfil si quieres -->
-            <img src="https://i.imgur.com/TI2REbs.png" alt="Foto de Perfil">
-        </div>
+    <div class="page-container">
         
-        <h1>CREADOR DE APPS Y WEB</h1>
-        <p class="username">Robert</p>
-
-        <!-- Contenedor de Botones -->
-        <div class="links-wrapper">
-            
-            <!-- BOTÓN TIKTOK -->
-            <a href="https://tiktok.com/@soy_saxtra" target="_blank" class="btn-link">
-                <span><i class="fab fa-tiktok tiktok-icon"></i> &nbsp;&nbsp;TikTok</span>
-            </a>
-
-            <!-- BOTÓN YOUTUBE -->
-            <a href="https://youtube.com/@Kyzen-RZ" target="_blank" class="btn-link">
-                <span><i class="fab fa-youtube youtube-icon"></i> &nbsp;&nbsp;YouTube</span>
-            </a>
-
-            <!-- BOTÓN INSTAGRAM -->
-            <a href="https://www.instagram.com/soysaxtra?utm_source=qr" target="_blank" class="btn-link">
-                <span><i class="fab fa-instagram instagram-icon"></i> &nbsp;&nbsp;Instagram</span>
-            </a>
-
-
+        <!-- Sección de Perfil -->
+        <div class="profile">
+            <!-- Reemplaza la URL por tu foto real -->
+            <img src="https://i.imgur.com/TI2REbs.png" alt="Tu Foto de Perfil" class="profile-img">
+            <h1>
+            ROBERT CREATIVO</h1>
+            <p>Bienvenidos a mi espacio digital</p>
         </div>
 
-        <footer>
-            DISEÑO NEON © 2026
-        </footer>
+        <!-- Sección de Botones Sociales -->
+        <div class="social-links">
+            <!-- Recuerda cambiar el '#' por tus enlaces reales -->
+            <a href="https://tiktok.com/@soy_saxtra" target="_blank" class="social-btn">TikTok</a>
+            <a href="https://youtube.com/@Kyzen-RZ" target="_blank" class="social-btn">YouTube</a>
+            <a href="https://www.instagram.com/soy_saxtra?igsh=anhxcHY0cXZhNGxy" target="_blank" class="social-btn">Instagram</a>
+            <a href="https://www.facebook.com/share/1K13KffaqP/" target="_blank" class="social-btn">Facebook</a>
+        </div>
+
+        <!-- Letra Divisora -->
+        <div class="divider">MI APPS</div>
+
+        <!-- Sección de Descarga -->
+        <div class="download-section">
+            <!-- Reemplaza el '#' por el enlace de tu archivo a descargar -->
+            <a href="#" download class="download-btn">
+                APPS DE NOTIFICACION
+            </a>
+        </div>
+
     </div>
 
 </body>
-  </html>
+</html>
