@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FlashLed Notify — Descarga</title>
+<title>Mi Tienda de Apps</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -27,43 +27,24 @@
     -webkit-font-smoothing:antialiased;
   }
   h1,h2,h3{ font-family:'Space Grotesk', sans-serif; }
-
   a{ color:inherit; }
+  .wrap{ max-width:560px; margin:0 auto; padding:0 20px; }
 
-  .wrap{ max-width:520px; margin:0 auto; padding:0 20px; }
-
-  /* Ambient flash glow behind hero */
-  .hero{
+  header{
     position:relative;
-    padding:64px 0 40px;
-    overflow:hidden;
+    padding:48px 0 28px;
     text-align:center;
+    overflow:hidden;
   }
   .glow{
-    position:absolute;
-    top:-120px; left:50%;
-    transform:translateX(-50%);
-    width:340px; height:340px;
-    border-radius:50%;
-    filter:blur(70px);
-    opacity:0.35;
+    position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+    width:300px; height:300px; border-radius:50%;
+    filter:blur(70px); opacity:0.3;
     background:conic-gradient(from 0deg, var(--cyan), var(--magenta), var(--amber), var(--cyan));
     animation:spin 10s linear infinite;
-    z-index:0;
   }
   @keyframes spin{ to{ transform:translateX(-50%) rotate(360deg); } }
   @media (prefers-reduced-motion: reduce){ .glow{ animation:none; } }
-
-  .icon{
-    position:relative; z-index:1;
-    width:88px; height:88px;
-    margin:0 auto 22px;
-    border-radius:22px;
-    background:var(--bg-soft);
-    border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .icon .dot{ width:14px; height:14px; border-radius:50%; margin:0 3px; }
 
   .eyebrow{
     position:relative; z-index:1;
@@ -72,74 +53,90 @@
   }
   h1{
     position:relative; z-index:1;
-    font-size:32px; font-weight:700; letter-spacing:-0.01em;
-    margin-bottom:12px;
+    font-size:30px; font-weight:700; letter-spacing:-0.01em;
   }
-  .tagline{
+  .subtitle{
     position:relative; z-index:1;
-    color:var(--text-dim); font-size:15px; max-width:360px; margin:0 auto;
+    color:var(--text-dim); font-size:14px; margin-top:8px;
   }
 
-  .cta{
-    display:block;
-    margin:28px auto 0;
-    max-width:320px;
-    text-align:center;
+  .search{
+    position:relative; z-index:1;
+    margin-top:22px;
+  }
+  .search input{
+    width:100%;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    padding:12px 14px;
+    border-radius:10px;
+    outline:none;
+  }
+  .search input::placeholder{ color:var(--text-dim); }
+  .search input:focus{ border-color:var(--cyan); }
+
+  main{ padding:12px 0 48px; }
+
+  .count{
+    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--text-dim); font-weight:600;
+    margin:24px 0 14px;
+  }
+
+  .app-card{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:12px;
+  }
+  .app-icon{
+    flex:none;
+    width:52px; height:52px;
+    border-radius:14px;
+    background:var(--bg-soft);
+    display:flex; align-items:center; justify-content:center;
+    gap:3px;
+  }
+  .app-icon .dot{ width:8px; height:8px; border-radius:50%; }
+
+  .app-info{ flex:1; min-width:0; }
+  .app-info h3{ font-size:15px; font-weight:600; margin-bottom:2px; }
+  .app-info p{
+    font-size:12.5px; color:var(--text-dim);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .app-meta{ font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+  .get-btn{
+    flex:none;
     text-decoration:none;
     background:linear-gradient(90deg, var(--cyan), var(--magenta));
     color:#05070a;
     font-weight:600;
-    font-size:16px;
-    padding:15px 24px;
-    border-radius:12px;
-    position:relative; z-index:1;
-  }
-  .meta{
-    position:relative; z-index:1;
-    font-size:12px; color:var(--text-dim);
-    margin-top:10px;
+    font-size:13px;
+    padding:9px 16px;
+    border-radius:9px;
+    white-space:nowrap;
   }
 
-  section{ padding:28px 0; border-top:1px solid var(--line); }
-
-  .section-label{
-    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--text-dim); font-weight:600; margin-bottom:16px;
+  .empty{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:13.5px;
+    padding:40px 0;
+    display:none;
   }
-
-  .feature{
-    display:flex; gap:14px; align-items:flex-start;
-    padding:14px 0;
-  }
-  .feature .swatch{
-    flex:none;
-    width:10px; height:10px; border-radius:50%;
-    margin-top:6px;
-  }
-  .feature h3{ font-size:15px; font-weight:600; margin-bottom:3px; }
-  .feature p{ font-size:13.5px; color:var(--text-dim); }
-
-  .steps{ counter-reset:step; }
-  .step{
-    counter-increment:step;
-    display:flex; gap:14px;
-    padding:12px 0;
-    font-size:14px;
-  }
-  .step::before{
-    content: counter(step);
-    flex:none;
-    width:24px; height:24px; border-radius:50%;
-    background:var(--card); border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:600; color:var(--text-dim);
-  }
-  .step p{ color:var(--text-dim); padding-top:2px; }
-  .step b{ color:var(--text); font-weight:600; }
 
   footer{
     text-align:center;
-    padding:32px 0 48px;
+    padding:20px 0 40px;
     font-size:12px;
     color:var(--text-dim);
   }
@@ -147,53 +144,80 @@
 </head>
 <body>
 
-  <div class="hero">
+  <header>
     <div class="glow"></div>
     <div class="wrap">
-      <div class="icon">
-        <span class="dot" style="background:var(--cyan)"></span>
-        <span class="dot" style="background:var(--magenta)"></span>
-        <span class="dot" style="background:var(--amber)"></span>
+      <div class="eyebrow">Tienda independiente</div>
+      <h1>Mi Tienda de Apps</h1>
+      <p class="subtitle">Aplicaciones para descargar directo, fuera de Google Play.</p>
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Buscar una app...">
       </div>
-      <div class="eyebrow">App para Android</div>
-      <h1>FlashLed Notify</h1>
-      <p class="tagline">Personaliza el color y el patrón del flash de tu celular para cada notificación que te llega.</p>
-
-      <a class="cta" href="https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/v1/FlashLed.Notify.V1.0.apk" download>Descargar APK</a>
-      <p class="meta">v1.0 · Android 8.0 o superior</p>
     </div>
-  </div>
+  </header>
 
-  <div class="wrap">
-    <section>
-      <div class="section-label">Qué hace</div>
-      <div class="feature">
-        <span class="swatch" style="background:var(--cyan)"></span>
-        <div><h3>Colores por app</h3><p>Asigna un color de flash distinto a WhatsApp, Instagram, mensajes y más.</p></div>
-      </div>
-      <div class="feature">
-        <span class="swatch" style="background:var(--magenta)"></span>
-        <div><h3>Patrones personalizados</h3><p>Elige si el flash parpadea rápido, lento, o en secuencia.</p></div>
-      </div>
-      <div class="feature">
-        <span class="swatch" style="background:var(--amber)"></span>
-        <div><h3>Sin conexión</h3><p>Funciona completamente en tu celular, no necesita internet.</p></div>
-      </div>
-    </section>
+  <main class="wrap">
+    <div class="count" id="countLabel"></div>
+    <div id="appList"></div>
+    <p class="empty" id="emptyMsg">No encontramos ninguna app con ese nombre.</p>
+  </main>
 
-    <section>
-      <div class="section-label">Cómo instalarla</div>
-      <div class="steps">
-        <div class="step"><p>Toca <b>Descargar APK</b> arriba. Tu navegador va a avisar que es un archivo fuera de Google Play, es normal.</p></div>
-        <div class="step"><p>Si tu celular te lo pide, activa <b>Instalar apps desconocidas</b> para el navegador, en Ajustes.</p></div>
-        <div class="step"><p>Abre el archivo descargado y toca <b>Instalar</b>.</p></div>
-      </div>
-    </section>
+  <footer>
+    Distribuido de forma independiente, fuera de Google Play.
+  </footer>
 
-    <footer>
-      Distribuido de forma independiente, fuera de Google Play.
-    </footer>
-  </div>
+<script>
+  // ── Para agregar una app nueva, copia un bloque {...} y cambia sus datos ──
+  const apps = [
+    {
+      name: "FlashLed Notify",
+      description: "Personaliza el color y patrón del flash para cada notificación",
+      version: "v1.0",
+      size: "0.44 MB",
+      colors: ["#00e5c7", "#ff3d7f", "#ffb020"],
+      downloadUrl: "https://github.com/ronygarena3-cell/Soy_saxtra.github.io/releases/download/v1/FlashLed.Notify.V1.0.apk"
+    }
+    // Ejemplo de cómo se vería una segunda app:
+    // {
+    //   name: "Nombre de la app",
+    //   description: "Descripción corta de una línea",
+    //   version: "v1.0",
+    //   size: "1.2 MB",
+    //   colors: ["#00e5c7", "#ff3d7f", "#ffb020"],
+    //   downloadUrl: "https://github.com/usuario/repo/releases/download/v1/archivo.apk"
+    // }
+  ];
+
+  const listEl = document.getElementById('appList');
+  const countEl = document.getElementById('countLabel');
+  const emptyEl = document.getElementById('emptyMsg');
+  const searchEl = document.getElementById('searchInput');
+
+  function render(filter = "") {
+    const q = filter.trim().toLowerCase();
+    const filtered = apps.filter(a => a.name.toLowerCase().includes(q));
+
+    listEl.innerHTML = filtered.map(app => `
+      <div class="app-card">
+        <div class="app-icon">
+          ${app.colors.map(c => `<span class="dot" style="background:${c}"></span>`).join('')}
+        </div>
+        <div class="app-info">
+          <h3>${app.name}</h3>
+          <p>${app.description}</p>
+          <div class="app-meta">${app.version} · ${app.size}</div>
+        </div>
+        <a class="get-btn" href="${app.downloadUrl}" download>Obtener</a>
+      </div>
+    `).join('');
+
+    countEl.textContent = filtered.length + (filtered.length === 1 ? ' app disponible' : ' apps disponibles');
+    emptyEl.style.display = filtered.length === 0 ? 'block' : 'none';
+  }
+
+  searchEl.addEventListener('input', e => render(e.target.value));
+  render();
+</script>
 
 </body>
 </html>
